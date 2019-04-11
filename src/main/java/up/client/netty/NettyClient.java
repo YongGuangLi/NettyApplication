@@ -1,7 +1,5 @@
 package up.client.netty;
-
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+ 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -17,9 +15,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
-import io.netty.handler.codec.serialization.ObjectEncoder;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.codec.serialization.ObjectEncoder; 
  
 
 /**
@@ -29,9 +25,7 @@ import io.netty.handler.codec.string.StringEncoder;
  * @Date: 2019-02-15 16:18
  **/
 
-@Component
-@Data
-@Slf4j
+@Component 
 public class NettyClient extends Thread{
 
 	@Autowired
@@ -59,11 +53,13 @@ public class NettyClient extends Thread{
 				}
 			});
  
-			// Start the client.
-			channelFuture = b.connect(ip, port).sync(); // (5)
-		 
-			// Wait until the connection is closed.
-			channelFuture.channel().closeFuture().sync(); 
+			while (true) {
+				// Start the client.
+				channelFuture = b.connect(ip, port).sync(); // (5) 
+				
+				// Wait until the connection is closed.
+				channelFuture.channel().closeFuture().sync();   
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (Exception e){

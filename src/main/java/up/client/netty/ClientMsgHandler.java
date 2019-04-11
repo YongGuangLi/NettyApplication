@@ -1667,11 +1667,13 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {   
 		System.out.println("channelActive");  
+        ctx.fireChannelActive();
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		System.out.println("channelInactive");
+		
 		ctx.fireChannelInactive(); 
 	} 
 }
