@@ -47,16 +47,16 @@ public class RedisMessageListener implements MessageListener {
 	
 	@Override
 	public void onMessage(Message message, byte[] pattern) {
-//		up.common.nettypojo.Message pojoMessage = getSysDataMessage();  
-//		this.nettyClient.getChannelFuture().channel().writeAndFlush(pojoMessage);   
+		up.common.nettypojo.Message pojoMessage = getGenerateLoginInfoMessage("auditor", 1);
+		System.out.println(pojoMessage);
+		this.nettyClient.getChannelFuture().channel().writeAndFlush(pojoMessage);   
 		 
+		/*
 		try {
 			NetworkCollect.MainMessage mainMessage = NetworkCollect.MainMessage.parseFrom(message.getBody()); 
 			if(mainMessage.getMsgType().compareTo(MsgHeadType.HT_Invalid) == 0)
-				return; 
-			if(mainMessage.getMsgType().compareTo(MsgHeadType.HT_InsertLog) == 0)
-				return; 
-			 
+				return;  
+			
 			up.common.nettypojo.Message pojoMessage = null;
 			switch (mainMessage.getMsgType()) {
 			case HT_GetCollectList:
@@ -218,13 +218,17 @@ public class RedisMessageListener implements MessageListener {
 				pojoMessage = getUpdateUsersRoleIdMessage(updateUsersRoleId);
 				System.out.println("更新用户与角色的关系, 角色ID:" + updateUsersRoleId.getRoleId() + " "+ updateUsersRoleId.getAddUserIdListList() + " " + updateUsersRoleId.getDelUserIdListList());
 				break;
+			case HT_GetVersionInfo:
+				pojoMessage = getVersionInfoMessage();
+				System.out.println("获取版本信息");
+				break;
 			case HT_SystemUpdate:
 				NetworkCollect.SystemUpdate systemUpdate = mainMessage.getSystemUpdate();
 				pojoMessage = getSystemUpdateMessage(systemUpdate);
 				System.out.println("系统升级");
 				break;
 			case HT_Restart: 
-//				pojoMessage = getRestartMessage();
+				pojoMessage = getRestartMessage();
 				System.out.println("系统服务（程序）重启");
 				break; 
 			case HT_GetBackupDataDate: 
@@ -272,12 +276,12 @@ public class RedisMessageListener implements MessageListener {
 				pojoMessage = getGenerateLoginInfoMessage(generateLoginInfo.getUsername(), generateLoginInfo.getSubType());
 				System.out.println("生成登录日志:" + generateLoginInfo.getUsername());
 				break; 
-//			case HT_InsertLog:
-//				NetworkCollect.InsertLog insertLog = mainMessage.getInsertLog();
-//				NetworkCollect.LogsEntity logsEntity = insertLog.getLogInfo(); 
-//				pojoMessage = getInsertLogMessage(logsEntity); 
-//				System.out.println("插入日志");
-//				break; 
+			case HT_InsertLog:
+				NetworkCollect.InsertLog insertLog = mainMessage.getInsertLog();
+				NetworkCollect.LogsEntity logsEntity = insertLog.getLogInfo(); 
+				pojoMessage = getInsertLogMessage(logsEntity); 
+				System.out.println("插入日志,用户名:" + logsEntity.getTargetObj() + " 日志类型:" + logsEntity.getType() + " 描述:" + logsEntity.getActionDesc());
+				break; 
 			case HT_GetSVRDevice:
 				NetworkCollect.GetSvrDevices getSvrDevices = mainMessage.getGetSvrDevices();
 				pojoMessage = getSVRDeviceMessage(getSvrDevices);
@@ -459,7 +463,8 @@ public class RedisMessageListener implements MessageListener {
 		} catch (InvalidProtocolBufferException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}      
+		}     
+		*/ 
 	}
 
 	public static String bytesToHexString(byte[] src) {
@@ -648,9 +653,11 @@ public class RedisMessageListener implements MessageListener {
 		
 		logsSearchParam.setKeyWord(getLogsSearchParam.getKeyWord());
 		logsSearchParam.setSort(getLogsSearchParam.getSort());
-		logsSearchParam.setStartTime(getLogsSearchParam.getStartTime());
-		logsSearchParam.setEndTime(getLogsSearchParam.getEndTime());
-		
+//		logsSearchParam.setStartTime(getLogsSearchParam.getStartTime());
+//		logsSearchParam.setEndTime(getLogsSearchParam.getEndTime());
+
+		logsSearchParam.setStartTime(null);
+		logsSearchParam.setEndTime(null);
 		mapLogSearchParas.put("searchParams", logsSearchParam); 
 		
 		pojoMessage.setBody(mapLogSearchParas);
@@ -1007,6 +1014,7 @@ public class RedisMessageListener implements MessageListener {
 		Map<String, Object> mapGenerateLoginInfoParam = new HashMap<String, Object>();
 		mapGenerateLoginInfoParam.put("username", username); 
 		mapGenerateLoginInfoParam.put("subType", subType);
+		
 		pojoMessage.setBody(mapGenerateLoginInfoParam);
 		return pojoMessage;
 	}
@@ -1014,14 +1022,14 @@ public class RedisMessageListener implements MessageListener {
 	public up.common.nettypojo.Message getInsertLogMessage(NetworkCollect.LogsEntity logsEntity) {
 		up.common.nettypojo.Message pojoMessage = new up.common.nettypojo.Message();  
 		pojoMessage.setHead(MessageHead.insertLog);
-		LogsEntity logsEntityBody = new LogsEntity();
-		logsEntityBody.setId(logsEntity.getId());
+		
+		LogsEntity logsEntityBody = new LogsEntity(); 
+		
 		logsEntityBody.setType(logsEntity.getType());
-		logsEntityBody.setLevel(logsEntity.getLevel());
+		logsEntityBody.setLevel(logsEntity.getLevel() + 1);
 		logsEntityBody.setTargetObj(logsEntity.getTargetObj());
-		logsEntityBody.setActionDesc(logsEntity.getActionDesc());
-		logsEntityBody.setActionTime(logsEntity.getActionTime());
-		logsEntityBody.setLastmodifytime(logsEntity.getLastmodifytime());
+		logsEntityBody.setActionDesc(logsEntity.getActionDesc()); 
+		 
 		pojoMessage.setBody(logsEntityBody);
 		return pojoMessage;
 	}

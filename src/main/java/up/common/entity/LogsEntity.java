@@ -114,7 +114,7 @@ public class LogsEntity implements Serializable {
     @Override
     public String toString() {
         return "LogsEntity{" +
-                "id=" + id +
+                "id=" + id + " targetObject:" + targetObj + " level:"+ level + " actionDesc:" + actionDesc + 
                 '}';
     }
 }

@@ -1,19 +1,13 @@
 package up.client.netty;
  
   
-
-import static org.assertj.core.api.Assertions.entry;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-
+ 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
+import java.text.SimpleDateFormat; 
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.apache.ibatis.javassist.expr.NewArray;
+ 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.core.RedisTemplate; 
@@ -24,10 +18,7 @@ import com.github.pagehelper.Page;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.networkcollect.NetworkCollect;
 import com.networkcollect.NetworkCollect.MsgHeadType; 
- 
-//import collect.panel.bounced.PromptBoxFrame;
-//import collect.panel.handler.*; 
-//import collect.statusRunning.StatusRunningPage;
+  
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter; 
 import up.common.entity.AssetsDeviceEntity;
@@ -295,13 +286,18 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws InvalidProtocolBufferException {
 
-		NetworkCollect.MainMessage.Builder mainMessageBuilder = NetworkCollect.MainMessage.newBuilder();
+	 
+	 
 		// 处理数据返回
 		Message message = (Message) msg;
-		String head = message.getHead();
+		String head = message.getHead(); 
 		Object object = message.getBody(); 
 		
+		if (head == null) {
+			return;
+		}
 		System.out.println("channelRead:" + (Message) msg);
+		NetworkCollect.MainMessage.Builder mainMessageBuilder = NetworkCollect.MainMessage.newBuilder();
 		switch (head) {
 		case MessageHead.userLogin: 
 			Map<String, Object> mapUserLogin = (Map<String, Object>) object; 
@@ -632,7 +628,7 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			NetworkCollect.InsertLog.Builder insertLogBuilder = NetworkCollect.InsertLog.newBuilder();
 			insertLogBuilder.setLogsNum(logNum);
 			
-//			System.out.println("插入日志结果:" + logNum);
+			System.out.println("插入日志结果:" + logNum);
 			mainMessageBuilder.setInsertLog(insertLogBuilder);
 			break;
 		case MessageHead.getIsCover:
@@ -1492,10 +1488,10 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_GetVersionInfo);
 			NetworkCollect.GetVersionInfo.Builder getVersionInfoBuilder = NetworkCollect.GetVersionInfo.newBuilder();
 			getVersionInfoBuilder.setVersion(versionInfo);
+			
 			System.out.println("版本信息:" + versionInfo);
 			mainMessageBuilder.setGetVersionInfo(getVersionInfoBuilder);
-			break;
-
+			break; 
 		case MessageHead.initDangerCommand:
 			Map<String, Object> mapDangerCommand = (Map<String, Object>) object; 
 			
