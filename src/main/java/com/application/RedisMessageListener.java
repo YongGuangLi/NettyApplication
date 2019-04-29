@@ -1,14 +1,19 @@
 package com.application;
  
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
  
 
-import org.apache.commons.codec.binary.Base64; 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.expression.spel.ast.Literal;
 
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -37,25 +42,40 @@ import up.common.xmlentity.Platform;
 public class RedisMessageListener implements MessageListener {
 
 	private NettyClient nettyClient;
+	
+	private RedisTemplate<String, Object> redisTemplate;
 
-	public RedisMessageListener(NettyClient nettyClient, String ServerAddress, int ServerPort) {
+	public RedisMessageListener(NettyClient nettyClient, String ServerAddress, int ServerPort, RedisTemplate<String, Object> redisTemplate) {
 		this.nettyClient = nettyClient;
 		this.nettyClient.start(ServerAddress, ServerPort);
 		
 		System.out.println("ServerAddress:" + ServerAddress + " ServerPort:" + ServerPort);
+		
+		this.redisTemplate = redisTemplate;
 	} 
 	
 	@Override
 	public void onMessage(Message message, byte[] pattern) {
-		up.common.nettypojo.Message pojoMessage = getGenerateLoginInfoMessage("auditor", 1);
+		/*
+		up.common.nettypojo.Message pojoMessage = getGenerateLoginInfoMessage("admin", 1);
 		System.out.println(pojoMessage);
 		this.nettyClient.getChannelFuture().channel().writeAndFlush(pojoMessage);   
+		*/
 		 
-		/*
 		try {
 			NetworkCollect.MainMessage mainMessage = NetworkCollect.MainMessage.parseFrom(message.getBody()); 
 			if(mainMessage.getMsgType().compareTo(MsgHeadType.HT_Invalid) == 0)
 				return;  
+			
+			if(mainMessage.getMsgType().compareTo(MsgHeadType.HT_ConfirmAuthen) == 0){
+				
+				NetworkCollect.ConfirmAuthen confirmAuthen = mainMessage.getConfirmAuthen();
+				NetworkCollect.MainMessage confirmAuthenMessage = getConfirmAuthen(confirmAuthen);
+				redisTemplate.convertAndSend("GridClient", confirmAuthenMessage.toByteArray());
+				
+				System.out.println(confirmAuthen.getFuncId() + " " + confirmAuthen.getUserName() + " " + confirmAuthen.getPassword());
+				return;
+			} 
 			
 			up.common.nettypojo.Message pojoMessage = null;
 			switch (mainMessage.getMsgType()) {
@@ -274,7 +294,7 @@ public class RedisMessageListener implements MessageListener {
 			case HT_GenerateLoginInfo: 
 				NetworkCollect.GenerateLoginInfo generateLoginInfo = mainMessage.getGenerateLoginInfo(); 
 				pojoMessage = getGenerateLoginInfoMessage(generateLoginInfo.getUsername(), generateLoginInfo.getSubType());
-				System.out.println("生成登录日志:" + generateLoginInfo.getUsername());
+				System.out.println("生成客户端用户登录采集信息:" + generateLoginInfo.getUsername());
 				break; 
 			case HT_InsertLog:
 				NetworkCollect.InsertLog insertLog = mainMessage.getInsertLog();
@@ -453,18 +473,17 @@ public class RedisMessageListener implements MessageListener {
 				NetworkCollect.ExportCertificate exportCertificateMessage = mainMessage.getExportCertificate();
 				pojoMessage = getExportCertificateMessage(exportCertificateMessage);
 				System.out.println("导出证书"); 
-				break;
+				break; 
 			default:
 				break;
 			}
-			
-			System.out.println(pojoMessage); 
+			 
+			System.out.println(pojoMessage);
 			ChannelFuture future = this.nettyClient.getChannelFuture().channel().writeAndFlush((Object)pojoMessage);   
 		} catch (InvalidProtocolBufferException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}     
-		*/ 
+		}      
 	}
 
 	public static String bytesToHexString(byte[] src) {
@@ -494,8 +513,8 @@ public class RedisMessageListener implements MessageListener {
 		 
 		byte[] encryptPass = RSACoder.handleByPublic(userEntity.getPassword().getBytes(),
 				Base64.decodeBase64(RSACoder.getPublicKeyString()), true);  
-		String pass = Base64.encodeBase64String(encryptPass);
-		userEntityBody.setPassword(pass); 
+		String pass = Base64.encodeBase64String(encryptPass); 
+		userEntityBody.setPassword(pass);   
 		
 		userEntityBody.setDescription(userEntity.getDescription());
 		userEntityBody.setUkey(userEntity.getUkey());
@@ -627,6 +646,7 @@ public class RedisMessageListener implements MessageListener {
 		collectSearchParam.setDeviceName(getCollectSearchParam.getDeviceName()); 
 		collectSearchParam.setBeginTime(getCollectSearchParam.getBeginTime());
 		collectSearchParam.setEndTime(getCollectSearchParam.getEndTime()); 
+		
 		mapCollectSearchParam.put("searchParams", collectSearchParam); 
 		
 		pojoMessage.setBody(mapCollectSearchParam);  
@@ -644,20 +664,19 @@ public class RedisMessageListener implements MessageListener {
 		NetworkCollect.LogsSearchParam getLogsSearchParam = getLogs.getSearchParams();
 		
 		LogsSearchParam logsSearchParam = new LogsSearchParam(); 
+
+		String type = getLogsSearchParam.getType().isEmpty() ? null : getLogsSearchParam.getType(); 
+		logsSearchParam.setType(type); 
 		
 		logsSearchParam.setLevel(getLogsSearchParam.getLevel());
-		String type = null;
-		if (!getLogsSearchParam.getType().isEmpty())  
-			type = getLogsSearchParam.getType(); 
-		logsSearchParam.setType(type);
 		
-		logsSearchParam.setKeyWord(getLogsSearchParam.getKeyWord());
+		String KeyWord = getLogsSearchParam.getKeyWord().isEmpty() ? null : getLogsSearchParam.getKeyWord();
+		logsSearchParam.setKeyWord(KeyWord);
+		
 		logsSearchParam.setSort(getLogsSearchParam.getSort());
-//		logsSearchParam.setStartTime(getLogsSearchParam.getStartTime());
-//		logsSearchParam.setEndTime(getLogsSearchParam.getEndTime());
-
-		logsSearchParam.setStartTime(null);
-		logsSearchParam.setEndTime(null);
+		logsSearchParam.setStartTime(getLogsSearchParam.getStartTime());   
+		logsSearchParam.setEndTime(getLogsSearchParam.getEndTime());  
+ 
 		mapLogSearchParas.put("searchParams", logsSearchParam); 
 		
 		pojoMessage.setBody(mapLogSearchParas);
@@ -1029,7 +1048,8 @@ public class RedisMessageListener implements MessageListener {
 		logsEntityBody.setLevel(logsEntity.getLevel() + 1);
 		logsEntityBody.setTargetObj(logsEntity.getTargetObj());
 		logsEntityBody.setActionDesc(logsEntity.getActionDesc()); 
-		 
+		logsEntityBody.setDelflag(false);
+		
 		pojoMessage.setBody(logsEntityBody);
 		return pojoMessage;
 	}
@@ -1734,6 +1754,22 @@ public class RedisMessageListener implements MessageListener {
 		
 		pojoMessage.setBody(mapExportCertificateParas);
 		return pojoMessage;
+	}
+	
+	public NetworkCollect.MainMessage getConfirmAuthen(NetworkCollect.ConfirmAuthen confirmAuthen) { 
+		NetworkCollect.MainMessage.Builder mainMessageBuilder = NetworkCollect.MainMessage.newBuilder();
+		mainMessageBuilder.setMsgType(MsgHeadType.HT_ConfirmAuthen);
+		
+		NetworkCollect.ConfirmAuthen.Builder confirmAuthenBuilder = NetworkCollect.ConfirmAuthen.newBuilder();
+		String passwd =  confirmAuthen.getPassword();
+		String encodePasswd = RSACoder.getEncodePasswd(passwd);
+		
+		confirmAuthenBuilder.setFuncId(confirmAuthen.getFuncId());
+		confirmAuthenBuilder.setUserName(confirmAuthen.getUserName());
+		confirmAuthenBuilder.setPassword(encodePasswd);
+		
+		mainMessageBuilder.setConfirmAuthen(confirmAuthenBuilder);
+		return mainMessageBuilder.build();
 	}
 }
 

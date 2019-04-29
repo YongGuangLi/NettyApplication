@@ -69,7 +69,7 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 		userEntityBuilder.setRealname(userEntity.getRealname());
 		userEntityBuilder.setRoleid(userEntity.getRoleid());
 		userEntityBuilder.setGroupid(userEntity.getGroupid());
-		userEntityBuilder.setPassword(userEntity.getPassword()); 
+		userEntityBuilder.setPassword(userEntity.getPassword());   
 		
 		String telnumber = userEntity.getTelnumber() == null ? "" : userEntity.getTelnumber();
 		userEntityBuilder.setTelnumber(telnumber);

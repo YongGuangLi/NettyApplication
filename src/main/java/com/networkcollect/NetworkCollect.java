@@ -139,6 +139,7 @@ public final class NetworkCollect {
     HT_GetUserGroupByName(14),
     /**
      * <pre>
+     *用户密码校验
      * </pre>
      *
      * <code>HT_ConfirmAuthen = 15;</code>
@@ -1057,6 +1058,7 @@ public final class NetworkCollect {
     public static final int HT_GetUserGroupByName_VALUE = 14;
     /**
      * <pre>
+     *用户密码校验
      * </pre>
      *
      * <code>HT_ConfirmAuthen = 15;</code>
@@ -96264,6 +96266,642 @@ public final class NetworkCollect {
     }
   }
 
+  public interface ConfirmAuthenOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:ConfirmAuthen)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <pre>
+     *页面功能id
+     * </pre>
+     *
+     * <code>int32 funcId = 1;</code>
+     */
+    int getFuncId();
+
+    /**
+     * <pre>
+     *用户名
+     * </pre>
+     *
+     * <code>string userName = 2;</code>
+     */
+    java.lang.String getUserName();
+    /**
+     * <pre>
+     *用户名
+     * </pre>
+     *
+     * <code>string userName = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getUserNameBytes();
+
+    /**
+     * <pre>
+     *密码
+     * </pre>
+     *
+     * <code>string password = 3;</code>
+     */
+    java.lang.String getPassword();
+    /**
+     * <pre>
+     *密码
+     * </pre>
+     *
+     * <code>string password = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getPasswordBytes();
+  }
+  /**
+   * <pre>
+   *用户密码校验
+   * </pre>
+   *
+   * Protobuf type {@code ConfirmAuthen}
+   */
+  public  static final class ConfirmAuthen extends
+      com.google.protobuf.GeneratedMessageLite<
+          ConfirmAuthen, ConfirmAuthen.Builder> implements
+      // @@protoc_insertion_point(message_implements:ConfirmAuthen)
+      ConfirmAuthenOrBuilder {
+    private ConfirmAuthen() {
+      userName_ = "";
+      password_ = "";
+    }
+    public static final int FUNCID_FIELD_NUMBER = 1;
+    private int funcId_;
+    /**
+     * <pre>
+     *页面功能id
+     * </pre>
+     *
+     * <code>int32 funcId = 1;</code>
+     */
+    public int getFuncId() {
+      return funcId_;
+    }
+    /**
+     * <pre>
+     *页面功能id
+     * </pre>
+     *
+     * <code>int32 funcId = 1;</code>
+     */
+    private void setFuncId(int value) {
+      
+      funcId_ = value;
+    }
+    /**
+     * <pre>
+     *页面功能id
+     * </pre>
+     *
+     * <code>int32 funcId = 1;</code>
+     */
+    private void clearFuncId() {
+      
+      funcId_ = 0;
+    }
+
+    public static final int USERNAME_FIELD_NUMBER = 2;
+    private java.lang.String userName_;
+    /**
+     * <pre>
+     *用户名
+     * </pre>
+     *
+     * <code>string userName = 2;</code>
+     */
+    public java.lang.String getUserName() {
+      return userName_;
+    }
+    /**
+     * <pre>
+     *用户名
+     * </pre>
+     *
+     * <code>string userName = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUserNameBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(userName_);
+    }
+    /**
+     * <pre>
+     *用户名
+     * </pre>
+     *
+     * <code>string userName = 2;</code>
+     */
+    private void setUserName(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      userName_ = value;
+    }
+    /**
+     * <pre>
+     *用户名
+     * </pre>
+     *
+     * <code>string userName = 2;</code>
+     */
+    private void clearUserName() {
+      
+      userName_ = getDefaultInstance().getUserName();
+    }
+    /**
+     * <pre>
+     *用户名
+     * </pre>
+     *
+     * <code>string userName = 2;</code>
+     */
+    private void setUserNameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      userName_ = value.toStringUtf8();
+    }
+
+    public static final int PASSWORD_FIELD_NUMBER = 3;
+    private java.lang.String password_;
+    /**
+     * <pre>
+     *密码
+     * </pre>
+     *
+     * <code>string password = 3;</code>
+     */
+    public java.lang.String getPassword() {
+      return password_;
+    }
+    /**
+     * <pre>
+     *密码
+     * </pre>
+     *
+     * <code>string password = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getPasswordBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(password_);
+    }
+    /**
+     * <pre>
+     *密码
+     * </pre>
+     *
+     * <code>string password = 3;</code>
+     */
+    private void setPassword(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      password_ = value;
+    }
+    /**
+     * <pre>
+     *密码
+     * </pre>
+     *
+     * <code>string password = 3;</code>
+     */
+    private void clearPassword() {
+      
+      password_ = getDefaultInstance().getPassword();
+    }
+    /**
+     * <pre>
+     *密码
+     * </pre>
+     *
+     * <code>string password = 3;</code>
+     */
+    private void setPasswordBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      password_ = value.toStringUtf8();
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (funcId_ != 0) {
+        output.writeInt32(1, funcId_);
+      }
+      if (!userName_.isEmpty()) {
+        output.writeString(2, getUserName());
+      }
+      if (!password_.isEmpty()) {
+        output.writeString(3, getPassword());
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (funcId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, funcId_);
+      }
+      if (!userName_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(2, getUserName());
+      }
+      if (!password_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(3, getPassword());
+      }
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    public static com.networkcollect.NetworkCollect.ConfirmAuthen parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static com.networkcollect.NetworkCollect.ConfirmAuthen parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static com.networkcollect.NetworkCollect.ConfirmAuthen parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static com.networkcollect.NetworkCollect.ConfirmAuthen parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static com.networkcollect.NetworkCollect.ConfirmAuthen parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static com.networkcollect.NetworkCollect.ConfirmAuthen parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static com.networkcollect.NetworkCollect.ConfirmAuthen parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static com.networkcollect.NetworkCollect.ConfirmAuthen parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static com.networkcollect.NetworkCollect.ConfirmAuthen parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static com.networkcollect.NetworkCollect.ConfirmAuthen parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static com.networkcollect.NetworkCollect.ConfirmAuthen parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static com.networkcollect.NetworkCollect.ConfirmAuthen parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.networkcollect.NetworkCollect.ConfirmAuthen prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    /**
+     * <pre>
+     *用户密码校验
+     * </pre>
+     *
+     * Protobuf type {@code ConfirmAuthen}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          com.networkcollect.NetworkCollect.ConfirmAuthen, Builder> implements
+        // @@protoc_insertion_point(builder_implements:ConfirmAuthen)
+        com.networkcollect.NetworkCollect.ConfirmAuthenOrBuilder {
+      // Construct using com.networkcollect.NetworkCollect.ConfirmAuthen.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <pre>
+       *页面功能id
+       * </pre>
+       *
+       * <code>int32 funcId = 1;</code>
+       */
+      public int getFuncId() {
+        return instance.getFuncId();
+      }
+      /**
+       * <pre>
+       *页面功能id
+       * </pre>
+       *
+       * <code>int32 funcId = 1;</code>
+       */
+      public Builder setFuncId(int value) {
+        copyOnWrite();
+        instance.setFuncId(value);
+        return this;
+      }
+      /**
+       * <pre>
+       *页面功能id
+       * </pre>
+       *
+       * <code>int32 funcId = 1;</code>
+       */
+      public Builder clearFuncId() {
+        copyOnWrite();
+        instance.clearFuncId();
+        return this;
+      }
+
+      /**
+       * <pre>
+       *用户名
+       * </pre>
+       *
+       * <code>string userName = 2;</code>
+       */
+      public java.lang.String getUserName() {
+        return instance.getUserName();
+      }
+      /**
+       * <pre>
+       *用户名
+       * </pre>
+       *
+       * <code>string userName = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getUserNameBytes() {
+        return instance.getUserNameBytes();
+      }
+      /**
+       * <pre>
+       *用户名
+       * </pre>
+       *
+       * <code>string userName = 2;</code>
+       */
+      public Builder setUserName(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setUserName(value);
+        return this;
+      }
+      /**
+       * <pre>
+       *用户名
+       * </pre>
+       *
+       * <code>string userName = 2;</code>
+       */
+      public Builder clearUserName() {
+        copyOnWrite();
+        instance.clearUserName();
+        return this;
+      }
+      /**
+       * <pre>
+       *用户名
+       * </pre>
+       *
+       * <code>string userName = 2;</code>
+       */
+      public Builder setUserNameBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setUserNameBytes(value);
+        return this;
+      }
+
+      /**
+       * <pre>
+       *密码
+       * </pre>
+       *
+       * <code>string password = 3;</code>
+       */
+      public java.lang.String getPassword() {
+        return instance.getPassword();
+      }
+      /**
+       * <pre>
+       *密码
+       * </pre>
+       *
+       * <code>string password = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getPasswordBytes() {
+        return instance.getPasswordBytes();
+      }
+      /**
+       * <pre>
+       *密码
+       * </pre>
+       *
+       * <code>string password = 3;</code>
+       */
+      public Builder setPassword(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setPassword(value);
+        return this;
+      }
+      /**
+       * <pre>
+       *密码
+       * </pre>
+       *
+       * <code>string password = 3;</code>
+       */
+      public Builder clearPassword() {
+        copyOnWrite();
+        instance.clearPassword();
+        return this;
+      }
+      /**
+       * <pre>
+       *密码
+       * </pre>
+       *
+       * <code>string password = 3;</code>
+       */
+      public Builder setPasswordBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setPasswordBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:ConfirmAuthen)
+    }
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        Object arg0, Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new com.networkcollect.NetworkCollect.ConfirmAuthen();
+        }
+        case IS_INITIALIZED: {
+          return DEFAULT_INSTANCE;
+        }
+        case MAKE_IMMUTABLE: {
+          return null;
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case VISIT: {
+          Visitor visitor = (Visitor) arg0;
+          com.networkcollect.NetworkCollect.ConfirmAuthen other = (com.networkcollect.NetworkCollect.ConfirmAuthen) arg1;
+          funcId_ = visitor.visitInt(funcId_ != 0, funcId_,
+              other.funcId_ != 0, other.funcId_);
+          userName_ = visitor.visitString(!userName_.isEmpty(), userName_,
+              !other.userName_.isEmpty(), other.userName_);
+          password_ = visitor.visitString(!password_.isEmpty(), password_,
+              !other.password_.isEmpty(), other.password_);
+          if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
+              .INSTANCE) {
+          }
+          return this;
+        }
+        case MERGE_FROM_STREAM: {
+          com.google.protobuf.CodedInputStream input =
+              (com.google.protobuf.CodedInputStream) arg0;
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry =
+              (com.google.protobuf.ExtensionRegistryLite) arg1;
+          try {
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                default: {
+                  if (!input.skipField(tag)) {
+                    done = true;
+                  }
+                  break;
+                }
+                case 8: {
+
+                  funcId_ = input.readInt32();
+                  break;
+                }
+                case 18: {
+                  String s = input.readStringRequireUtf8();
+
+                  userName_ = s;
+                  break;
+                }
+                case 26: {
+                  String s = input.readStringRequireUtf8();
+
+                  password_ = s;
+                  break;
+                }
+              }
+            }
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw new RuntimeException(e.setUnfinishedMessage(this));
+          } catch (java.io.IOException e) {
+            throw new RuntimeException(
+                new com.google.protobuf.InvalidProtocolBufferException(
+                    e.getMessage()).setUnfinishedMessage(this));
+          } finally {
+          }
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          if (PARSER == null) {    synchronized (com.networkcollect.NetworkCollect.ConfirmAuthen.class) {
+              if (PARSER == null) {
+                PARSER = new DefaultInstanceBasedParser(DEFAULT_INSTANCE);
+              }
+            }
+          }
+          return PARSER;
+        }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:ConfirmAuthen)
+    private static final com.networkcollect.NetworkCollect.ConfirmAuthen DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new ConfirmAuthen();
+      DEFAULT_INSTANCE.makeImmutable();
+    }
+
+    public static com.networkcollect.NetworkCollect.ConfirmAuthen getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<ConfirmAuthen> PARSER;
+
+    public static com.google.protobuf.Parser<ConfirmAuthen> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
   public interface MainMessageOrBuilder extends
       // @@protoc_insertion_point(interface_extends:MainMessage)
       com.google.protobuf.MessageLiteOrBuilder {
@@ -97644,6 +98282,23 @@ public final class NetworkCollect {
      * <code>.InitCertificatePanel initCertificatePanel = 81;</code>
      */
     com.networkcollect.NetworkCollect.InitCertificatePanel getInitCertificatePanel();
+
+    /**
+     * <pre>
+     *用户密码校验
+     * </pre>
+     *
+     * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+     */
+    boolean hasConfirmAuthen();
+    /**
+     * <pre>
+     *用户密码校验
+     * </pre>
+     *
+     * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+     */
+    com.networkcollect.NetworkCollect.ConfirmAuthen getConfirmAuthen();
   }
   /**
    * <pre>
@@ -103798,6 +104453,82 @@ public final class NetworkCollect {
       
     }
 
+    public static final int CONFIRMAUTHEN_FIELD_NUMBER = 82;
+    private com.networkcollect.NetworkCollect.ConfirmAuthen confirmAuthen_;
+    /**
+     * <pre>
+     *用户密码校验
+     * </pre>
+     *
+     * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+     */
+    public boolean hasConfirmAuthen() {
+      return confirmAuthen_ != null;
+    }
+    /**
+     * <pre>
+     *用户密码校验
+     * </pre>
+     *
+     * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+     */
+    public com.networkcollect.NetworkCollect.ConfirmAuthen getConfirmAuthen() {
+      return confirmAuthen_ == null ? com.networkcollect.NetworkCollect.ConfirmAuthen.getDefaultInstance() : confirmAuthen_;
+    }
+    /**
+     * <pre>
+     *用户密码校验
+     * </pre>
+     *
+     * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+     */
+    private void setConfirmAuthen(com.networkcollect.NetworkCollect.ConfirmAuthen value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      confirmAuthen_ = value;
+      
+      }
+    /**
+     * <pre>
+     *用户密码校验
+     * </pre>
+     *
+     * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+     */
+    private void setConfirmAuthen(
+        com.networkcollect.NetworkCollect.ConfirmAuthen.Builder builderForValue) {
+      confirmAuthen_ = builderForValue.build();
+      
+    }
+    /**
+     * <pre>
+     *用户密码校验
+     * </pre>
+     *
+     * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+     */
+    private void mergeConfirmAuthen(com.networkcollect.NetworkCollect.ConfirmAuthen value) {
+      if (confirmAuthen_ != null &&
+          confirmAuthen_ != com.networkcollect.NetworkCollect.ConfirmAuthen.getDefaultInstance()) {
+        confirmAuthen_ =
+          com.networkcollect.NetworkCollect.ConfirmAuthen.newBuilder(confirmAuthen_).mergeFrom(value).buildPartial();
+      } else {
+        confirmAuthen_ = value;
+      }
+      
+    }
+    /**
+     * <pre>
+     *用户密码校验
+     * </pre>
+     *
+     * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+     */
+    private void clearConfirmAuthen() {  confirmAuthen_ = null;
+      
+    }
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (msgType_ != com.networkcollect.NetworkCollect.MsgHeadType.HT_Invalid.getNumber()) {
@@ -104042,6 +104773,9 @@ public final class NetworkCollect {
       }
       if (initCertificatePanel_ != null) {
         output.writeMessage(81, getInitCertificatePanel());
+      }
+      if (confirmAuthen_ != null) {
+        output.writeMessage(82, getConfirmAuthen());
       }
     }
 
@@ -104373,6 +105107,10 @@ public final class NetworkCollect {
       if (initCertificatePanel_ != null) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(81, getInitCertificatePanel());
+      }
+      if (confirmAuthen_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(82, getConfirmAuthen());
       }
       memoizedSerializedSize = size;
       return size;
@@ -110054,6 +110792,75 @@ public final class NetworkCollect {
         return this;
       }
 
+      /**
+       * <pre>
+       *用户密码校验
+       * </pre>
+       *
+       * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+       */
+      public boolean hasConfirmAuthen() {
+        return instance.hasConfirmAuthen();
+      }
+      /**
+       * <pre>
+       *用户密码校验
+       * </pre>
+       *
+       * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+       */
+      public com.networkcollect.NetworkCollect.ConfirmAuthen getConfirmAuthen() {
+        return instance.getConfirmAuthen();
+      }
+      /**
+       * <pre>
+       *用户密码校验
+       * </pre>
+       *
+       * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+       */
+      public Builder setConfirmAuthen(com.networkcollect.NetworkCollect.ConfirmAuthen value) {
+        copyOnWrite();
+        instance.setConfirmAuthen(value);
+        return this;
+        }
+      /**
+       * <pre>
+       *用户密码校验
+       * </pre>
+       *
+       * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+       */
+      public Builder setConfirmAuthen(
+          com.networkcollect.NetworkCollect.ConfirmAuthen.Builder builderForValue) {
+        copyOnWrite();
+        instance.setConfirmAuthen(builderForValue);
+        return this;
+      }
+      /**
+       * <pre>
+       *用户密码校验
+       * </pre>
+       *
+       * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+       */
+      public Builder mergeConfirmAuthen(com.networkcollect.NetworkCollect.ConfirmAuthen value) {
+        copyOnWrite();
+        instance.mergeConfirmAuthen(value);
+        return this;
+      }
+      /**
+       * <pre>
+       *用户密码校验
+       * </pre>
+       *
+       * <code>.ConfirmAuthen confirmAuthen = 82;</code>
+       */
+      public Builder clearConfirmAuthen() {  copyOnWrite();
+        instance.clearConfirmAuthen();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:MainMessage)
     }
     @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
@@ -110157,6 +110964,7 @@ public final class NetworkCollect {
           deleteCertificate_ = visitor.visitMessage(deleteCertificate_, other.deleteCertificate_);
           exportCertificate_ = visitor.visitMessage(exportCertificate_, other.exportCertificate_);
           initCertificatePanel_ = visitor.visitMessage(initCertificatePanel_, other.initCertificatePanel_);
+          confirmAuthen_ = visitor.visitMessage(confirmAuthen_, other.confirmAuthen_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
           }
@@ -111223,6 +112031,19 @@ public final class NetworkCollect {
                   if (subBuilder != null) {
                     subBuilder.mergeFrom(initCertificatePanel_);
                     initCertificatePanel_ = subBuilder.buildPartial();
+                  }
+
+                  break;
+                }
+                case 658: {
+                  com.networkcollect.NetworkCollect.ConfirmAuthen.Builder subBuilder = null;
+                  if (confirmAuthen_ != null) {
+                    subBuilder = confirmAuthen_.toBuilder();
+                  }
+                  confirmAuthen_ = input.readMessage(com.networkcollect.NetworkCollect.ConfirmAuthen.parser(), extensionRegistry);
+                  if (subBuilder != null) {
+                    subBuilder.mergeFrom(confirmAuthen_);
+                    confirmAuthen_ = subBuilder.buildPartial();
                   }
 
                   break;
