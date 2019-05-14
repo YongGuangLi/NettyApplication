@@ -237,7 +237,8 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 		NetworkCollect.LogsEntity.Builder logsEntityBuilder = NetworkCollect.LogsEntity.newBuilder();
 		logsEntityBuilder.setId(logsEntity.getId()); 
 		logsEntityBuilder.setType(logsEntity.getType());  
-		logsEntityBuilder.setUserId(logsEntity.getUserId());
+		Integer UserId = logsEntity.getUserId() == null? -1 : logsEntity.getUserId();
+		logsEntityBuilder.setUserId(UserId);
 		logsEntityBuilder.setLevel(logsEntity.getLevel());  
 		logsEntityBuilder.setTargetObj(logsEntity.getTargetObj());
 		logsEntityBuilder.setActionDesc(logsEntity.getActionDesc()); 
@@ -285,9 +286,7 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws InvalidProtocolBufferException {
-
-	 
-	 
+ 
 		// 处理数据返回
 		Message message = (Message) msg;
 		String head = message.getHead(); 
@@ -645,14 +644,15 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			break;
 		case MessageHead.getCollectList:
 			Map<String, Object> mapCollectList = (Map<String, Object>) object;
-		 
+			System.out.println(mapCollectList);
+			
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_GetCollectList);
 			NetworkCollect.GetCollectList.Builder getCollectListBuilder = NetworkCollect.GetCollectList.newBuilder();
 			
-			PageEntity getCollectListPage = (PageEntity)mapCollectList.get("page");
+			Integer count = (Integer)mapCollectList.get("count");
 			 
-			NetworkCollect.PageEntity.Builder pageEntityBuilder = getPageEntityBuilder(getCollectListPage);
-			getCollectListBuilder.setPageInfo(pageEntityBuilder); 
+//			NetworkCollect.PageEntity.Builder pageEntityBuilder = getPageEntityBuilder(getCollectListPage);
+//			getCollectListBuilder.setPageInfo(pageEntityBuilder); 
 			
 			List<CollectEventAndDescribe> listCollectEventAndDescribe = (List<CollectEventAndDescribe>)mapCollectList.get("collectEventList");
 			System.out.println("listCollectEventAndDescribeSize:" + listCollectEventAndDescribe.size());

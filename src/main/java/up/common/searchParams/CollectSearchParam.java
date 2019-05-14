@@ -12,6 +12,7 @@ public class CollectSearchParam implements Serializable {
     private int level;
     private String deviceType;
     private String deviceName;
+    private String ip;
     private String beginTime;
     private String endTime;
 }

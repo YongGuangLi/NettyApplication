@@ -618,7 +618,9 @@ public class RedisMessageListener implements MessageListener {
 		collectSearchParam.setLevel(getCollectSearchParam.getLevel()); 
 		String deviceType = getCollectSearchParam.getDeviceType().isEmpty() ? null : getCollectSearchParam.getDeviceType(); 
 		collectSearchParam.setDeviceType(deviceType); 
-		collectSearchParam.setDeviceName(getCollectSearchParam.getDeviceName()); 
+		String deviceName = getCollectSearchParam.getDeviceName().isEmpty() ? null : getCollectSearchParam.getDeviceName();
+		collectSearchParam.setDeviceName(deviceName);  
+		collectSearchParam.setIp(null); 
 		collectSearchParam.setBeginTime(getCollectSearchParam.getBeginTime());
 		collectSearchParam.setEndTime(getCollectSearchParam.getEndTime());
 
@@ -643,7 +645,11 @@ public class RedisMessageListener implements MessageListener {
 		collectSearchParam.setLevel(getCollectSearchParam.getLevel()); 
 		String deviceType = getCollectSearchParam.getDeviceType().isEmpty() ? null : getCollectSearchParam.getDeviceType(); 
 		collectSearchParam.setDeviceType(deviceType); 
-		collectSearchParam.setDeviceName(getCollectSearchParam.getDeviceName()); 
+		String deviceName = getCollectSearchParam.getDeviceName().isEmpty() ? null : getCollectSearchParam.getDeviceName();
+		collectSearchParam.setDeviceName(deviceName); 
+		
+		collectSearchParam.setIp(null);
+		
 		collectSearchParam.setBeginTime(getCollectSearchParam.getBeginTime());
 		collectSearchParam.setEndTime(getCollectSearchParam.getEndTime()); 
 		
