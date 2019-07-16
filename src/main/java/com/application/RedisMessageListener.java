@@ -1,30 +1,22 @@
 package com.application;
- 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+  
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
  
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.binary.Base64; 
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.expression.spel.ast.Literal;
+import org.springframework.data.redis.core.RedisTemplate; 
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.networkcollect.NetworkCollect; 
 import com.networkcollect.NetworkCollect.MsgHeadType; 
 
-import collect.core.security.RSACoder;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.util.CharsetUtil;
+import collect.core.security.RSACoder; 
+import io.netty.channel.ChannelFuture; 
 import up.client.netty.NettyClient;
 import up.common.entity.AssetsDeviceEntity;
 import up.common.entity.CertificateEntity;
@@ -51,7 +43,7 @@ public class RedisMessageListener implements MessageListener {
 		
 		System.out.println("ServerAddress:" + ServerAddress + " ServerPort:" + ServerPort);
 		
-		this.redisTemplate = redisTemplate;
+		this.redisTemplate = redisTemplate; 
 	} 
 	
 	@Override
@@ -69,9 +61,10 @@ public class RedisMessageListener implements MessageListener {
 			
 			if(mainMessage.getMsgType().compareTo(MsgHeadType.HT_ConfirmAuthen) == 0){
 				
-				NetworkCollect.ConfirmAuthen confirmAuthen = mainMessage.getConfirmAuthen();
+				NetworkCollect.ConfirmAuthen confirmAuthen = mainMessage.getConfirmAuthen(); 
 				NetworkCollect.MainMessage confirmAuthenMessage = getConfirmAuthen(confirmAuthen);
-				redisTemplate.convertAndSend("GridClient", confirmAuthenMessage.toByteArray());
+				System.out.println(confirmAuthenMessage.toByteArray());
+				this.redisTemplate.convertAndSend("GridClient", confirmAuthenMessage.toByteArray());
 				
 				System.out.println(confirmAuthen.getFuncId() + " " + confirmAuthen.getUserName() + " " + confirmAuthen.getPassword());
 				return;
@@ -94,10 +87,24 @@ public class RedisMessageListener implements MessageListener {
 				pojoMessage = getLogsMessage(getLogs);
 				System.out.println("获取审计日志列表");
 				break;
+			case HT_GetIsCover:
+				pojoMessage = getIsCoverMessage();
+				System.out.println("获取当前是否覆盖旧的审计记录");
+				break;
+			case HT_SetIsCoverLogs:
+				NetworkCollect.SetIsCoverLogs setIsCoverLogs = mainMessage.getSetIsCoverLogs();
+				pojoMessage = getSetIsCoverLogsMessage(setIsCoverLogs);
+				System.out.println("设置当前是否覆盖旧的审计记录");
+				break;
 			case HT_ExportLogs:
 				NetworkCollect.ExportLogs exportLogs = mainMessage.getExportLogs();
 				pojoMessage = getExportLogsMessage(exportLogs);
 				System.out.println("导出日志");
+				break;
+			case HT_ExportLogsChart:
+				NetworkCollect.ExportLogsChart exportLogsChart = mainMessage.getExportLogsChart();
+				pojoMessage = getExportLogsChartMessage(exportLogsChart);
+				System.out.println("导出日志报表");
 				break;
 			case HT_GetDevices:
 				NetworkCollect.GetDevices getDevices = mainMessage.getGetDevices();
@@ -616,11 +623,16 @@ public class RedisMessageListener implements MessageListener {
 		
 		CollectSearchParam collectSearchParam = new CollectSearchParam();   
 		collectSearchParam.setLevel(getCollectSearchParam.getLevel()); 
+		
 		String deviceType = getCollectSearchParam.getDeviceType().isEmpty() ? null : getCollectSearchParam.getDeviceType(); 
 		collectSearchParam.setDeviceType(deviceType); 
+		
 		String deviceName = getCollectSearchParam.getDeviceName().isEmpty() ? null : getCollectSearchParam.getDeviceName();
 		collectSearchParam.setDeviceName(deviceName);  
-		collectSearchParam.setIp(null); 
+		 
+		String ip = getCollectSearchParam.getIp().isEmpty() ? null : getCollectSearchParam.getIp();
+		collectSearchParam.setIp(ip); 
+		
 		collectSearchParam.setBeginTime(getCollectSearchParam.getBeginTime());
 		collectSearchParam.setEndTime(getCollectSearchParam.getEndTime());
 
@@ -643,16 +655,19 @@ public class RedisMessageListener implements MessageListener {
 		
 		CollectSearchParam collectSearchParam = new CollectSearchParam();  
 		collectSearchParam.setLevel(getCollectSearchParam.getLevel()); 
+		
 		String deviceType = getCollectSearchParam.getDeviceType().isEmpty() ? null : getCollectSearchParam.getDeviceType(); 
 		collectSearchParam.setDeviceType(deviceType); 
+		
 		String deviceName = getCollectSearchParam.getDeviceName().isEmpty() ? null : getCollectSearchParam.getDeviceName();
 		collectSearchParam.setDeviceName(deviceName); 
 		
-		collectSearchParam.setIp(null);
+		String ip = getCollectSearchParam.getIp().isEmpty() ? null : getCollectSearchParam.getIp();
+		collectSearchParam.setIp(ip); 
 		
 		collectSearchParam.setBeginTime(getCollectSearchParam.getBeginTime());
 		collectSearchParam.setEndTime(getCollectSearchParam.getEndTime()); 
-		
+		 
 		mapCollectSearchParam.put("searchParams", collectSearchParam); 
 		
 		pojoMessage.setBody(mapCollectSearchParam);  
@@ -690,6 +705,21 @@ public class RedisMessageListener implements MessageListener {
 	}
 	
 	
+	public up.common.nettypojo.Message getIsCoverMessage() {
+		up.common.nettypojo.Message pojoMessage = new up.common.nettypojo.Message();
+		pojoMessage.setHead(MessageHead.getIsCover);   
+		return pojoMessage;
+	}
+	
+	public up.common.nettypojo.Message getSetIsCoverLogsMessage(NetworkCollect.SetIsCoverLogs setIsCoverLogs) {
+		up.common.nettypojo.Message pojoMessage = new up.common.nettypojo.Message();
+		pojoMessage.setHead(MessageHead.setIsCoverLogs);   
+		
+		pojoMessage.setBody(setIsCoverLogs.getCovered());
+		
+		return pojoMessage;
+	}
+	
 	public up.common.nettypojo.Message getExportLogsMessage(NetworkCollect.ExportLogs exportLogs) {
 		up.common.nettypojo.Message pojoMessage = new up.common.nettypojo.Message();
 		pojoMessage.setHead(MessageHead.exportLogs);  
@@ -711,6 +741,13 @@ public class RedisMessageListener implements MessageListener {
 		mapLogSearchParas.put("searchParams", logsSearchParam); 
 		
 		pojoMessage.setBody(mapLogSearchParas);
+		return pojoMessage;
+	}
+	
+	public up.common.nettypojo.Message getExportLogsChartMessage(NetworkCollect.ExportLogsChart exportLogsChart) {
+		up.common.nettypojo.Message pojoMessage = new up.common.nettypojo.Message();
+		pojoMessage.setHead(MessageHead.exportLogsChart);   
+		
 		return pojoMessage;
 	}
 	

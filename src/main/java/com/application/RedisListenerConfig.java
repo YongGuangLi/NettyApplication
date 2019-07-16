@@ -21,14 +21,15 @@ public class RedisListenerConfig {
 	@Autowired
 	private NettyClient nettyClient; 
 	 
-	private RedisTemplate<String, Object> redisTemplate;@Autowired(required = false) 
+	private RedisTemplate<String, Object> redisTemplate;
+	@Autowired(required = false) 
 	public void setRedisTemplate(RedisTemplate redisTemplate) {
-		KryoRedisSerializer stringSerializer = new KryoRedisSerializer();
+		CustomRedisSerializer<Object> stringSerializer = new CustomRedisSerializer<Object>();
 	    redisTemplate.setKeySerializer(stringSerializer);
 	    redisTemplate.setValueSerializer(stringSerializer);
 	    redisTemplate.setHashKeySerializer(stringSerializer);
 	    redisTemplate.setHashValueSerializer(stringSerializer);
-	    this.redisTemplate = redisTemplate;
+	    this.redisTemplate = redisTemplate; 
 	}
 	
 	@Value("${server.address}")

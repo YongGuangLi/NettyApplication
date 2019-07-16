@@ -4,7 +4,7 @@ package com.application;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
-public class KryoRedisSerializer<T> implements RedisSerializer<T> { 
+public class CustomRedisSerializer<T> implements RedisSerializer<T> { 
     @Override
     public byte[] serialize(T t) throws SerializationException {
   

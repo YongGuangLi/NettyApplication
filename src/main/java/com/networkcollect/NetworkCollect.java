@@ -46440,6 +46440,24 @@ public final class NetworkCollect {
      */
     com.google.protobuf.ByteString
         getEndTimeBytes();
+
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 6;</code>
+     */
+    java.lang.String getIp();
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 6;</code>
+     */
+    com.google.protobuf.ByteString
+        getIpBytes();
   }
   /**
    * <pre>
@@ -46458,6 +46476,7 @@ public final class NetworkCollect {
       deviceName_ = "";
       beginTime_ = "";
       endTime_ = "";
+      ip_ = "";
     }
     public static final int LEVEL_FIELD_NUMBER = 1;
     private int level_;
@@ -46758,6 +46777,72 @@ public final class NetworkCollect {
       endTime_ = value.toStringUtf8();
     }
 
+    public static final int IP_FIELD_NUMBER = 6;
+    private java.lang.String ip_;
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 6;</code>
+     */
+    public java.lang.String getIp() {
+      return ip_;
+    }
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 6;</code>
+     */
+    public com.google.protobuf.ByteString
+        getIpBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(ip_);
+    }
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 6;</code>
+     */
+    private void setIp(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      ip_ = value;
+    }
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 6;</code>
+     */
+    private void clearIp() {
+      
+      ip_ = getDefaultInstance().getIp();
+    }
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 6;</code>
+     */
+    private void setIpBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      ip_ = value.toStringUtf8();
+    }
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (level_ != 0) {
@@ -46774,6 +46859,9 @@ public final class NetworkCollect {
       }
       if (!endTime_.isEmpty()) {
         output.writeString(5, getEndTime());
+      }
+      if (!ip_.isEmpty()) {
+        output.writeString(6, getIp());
       }
     }
 
@@ -46801,6 +46889,10 @@ public final class NetworkCollect {
       if (!endTime_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeStringSize(5, getEndTime());
+      }
+      if (!ip_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(6, getIp());
       }
       memoizedSerializedSize = size;
       return size;
@@ -47180,6 +47272,66 @@ public final class NetworkCollect {
         return this;
       }
 
+      /**
+       * <pre>
+       *ip地址
+       * </pre>
+       *
+       * <code>string ip = 6;</code>
+       */
+      public java.lang.String getIp() {
+        return instance.getIp();
+      }
+      /**
+       * <pre>
+       *ip地址
+       * </pre>
+       *
+       * <code>string ip = 6;</code>
+       */
+      public com.google.protobuf.ByteString
+          getIpBytes() {
+        return instance.getIpBytes();
+      }
+      /**
+       * <pre>
+       *ip地址
+       * </pre>
+       *
+       * <code>string ip = 6;</code>
+       */
+      public Builder setIp(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setIp(value);
+        return this;
+      }
+      /**
+       * <pre>
+       *ip地址
+       * </pre>
+       *
+       * <code>string ip = 6;</code>
+       */
+      public Builder clearIp() {
+        copyOnWrite();
+        instance.clearIp();
+        return this;
+      }
+      /**
+       * <pre>
+       *ip地址
+       * </pre>
+       *
+       * <code>string ip = 6;</code>
+       */
+      public Builder setIpBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setIpBytes(value);
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:CollectSearchParam)
     }
     @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
@@ -47212,6 +47364,8 @@ public final class NetworkCollect {
               !other.beginTime_.isEmpty(), other.beginTime_);
           endTime_ = visitor.visitString(!endTime_.isEmpty(), endTime_,
               !other.endTime_.isEmpty(), other.endTime_);
+          ip_ = visitor.visitString(!ip_.isEmpty(), ip_,
+              !other.ip_.isEmpty(), other.ip_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
           }
@@ -47263,6 +47417,12 @@ public final class NetworkCollect {
                   String s = input.readStringRequireUtf8();
 
                   endTime_ = s;
+                  break;
+                }
+                case 50: {
+                  String s = input.readStringRequireUtf8();
+
+                  ip_ = s;
                   break;
                 }
               }
@@ -49534,20 +49694,12 @@ public final class NetworkCollect {
 
     /**
      * <pre>
-     *界面分页参数
+     *采集信息总数
      * </pre>
      *
-     * <code>.PageEntity pageInfo = 4;</code>
+     * <code>int32 count = 4;</code>
      */
-    boolean hasPageInfo();
-    /**
-     * <pre>
-     *界面分页参数
-     * </pre>
-     *
-     * <code>.PageEntity pageInfo = 4;</code>
-     */
-    com.networkcollect.NetworkCollect.PageEntity getPageInfo();
+    int getCount();
 
     /**
      * <pre>
@@ -49737,80 +49889,39 @@ public final class NetworkCollect {
       
     }
 
-    public static final int PAGEINFO_FIELD_NUMBER = 4;
-    private com.networkcollect.NetworkCollect.PageEntity pageInfo_;
+    public static final int COUNT_FIELD_NUMBER = 4;
+    private int count_;
     /**
      * <pre>
-     *界面分页参数
+     *采集信息总数
      * </pre>
      *
-     * <code>.PageEntity pageInfo = 4;</code>
+     * <code>int32 count = 4;</code>
      */
-    public boolean hasPageInfo() {
-      return pageInfo_ != null;
+    public int getCount() {
+      return count_;
     }
     /**
      * <pre>
-     *界面分页参数
+     *采集信息总数
      * </pre>
      *
-     * <code>.PageEntity pageInfo = 4;</code>
+     * <code>int32 count = 4;</code>
      */
-    public com.networkcollect.NetworkCollect.PageEntity getPageInfo() {
-      return pageInfo_ == null ? com.networkcollect.NetworkCollect.PageEntity.getDefaultInstance() : pageInfo_;
+    private void setCount(int value) {
+      
+      count_ = value;
     }
     /**
      * <pre>
-     *界面分页参数
+     *采集信息总数
      * </pre>
      *
-     * <code>.PageEntity pageInfo = 4;</code>
+     * <code>int32 count = 4;</code>
      */
-    private void setPageInfo(com.networkcollect.NetworkCollect.PageEntity value) {
-      if (value == null) {
-        throw new NullPointerException();
-      }
-      pageInfo_ = value;
+    private void clearCount() {
       
-      }
-    /**
-     * <pre>
-     *界面分页参数
-     * </pre>
-     *
-     * <code>.PageEntity pageInfo = 4;</code>
-     */
-    private void setPageInfo(
-        com.networkcollect.NetworkCollect.PageEntity.Builder builderForValue) {
-      pageInfo_ = builderForValue.build();
-      
-    }
-    /**
-     * <pre>
-     *界面分页参数
-     * </pre>
-     *
-     * <code>.PageEntity pageInfo = 4;</code>
-     */
-    private void mergePageInfo(com.networkcollect.NetworkCollect.PageEntity value) {
-      if (pageInfo_ != null &&
-          pageInfo_ != com.networkcollect.NetworkCollect.PageEntity.getDefaultInstance()) {
-        pageInfo_ =
-          com.networkcollect.NetworkCollect.PageEntity.newBuilder(pageInfo_).mergeFrom(value).buildPartial();
-      } else {
-        pageInfo_ = value;
-      }
-      
-    }
-    /**
-     * <pre>
-     *界面分页参数
-     * </pre>
-     *
-     * <code>.PageEntity pageInfo = 4;</code>
-     */
-    private void clearPageInfo() {  pageInfo_ = null;
-      
+      count_ = 0;
     }
 
     public static final int COLLECTEVENTLIST_FIELD_NUMBER = 5;
@@ -50000,8 +50111,8 @@ public final class NetworkCollect {
       if (searchParams_ != null) {
         output.writeMessage(3, getSearchParams());
       }
-      if (pageInfo_ != null) {
-        output.writeMessage(4, getPageInfo());
+      if (count_ != 0) {
+        output.writeInt32(4, count_);
       }
       for (int i = 0; i < collectEventList_.size(); i++) {
         output.writeMessage(5, collectEventList_.get(i));
@@ -50025,9 +50136,9 @@ public final class NetworkCollect {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, getSearchParams());
       }
-      if (pageInfo_ != null) {
+      if (count_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, getPageInfo());
+          .computeInt32Size(4, count_);
       }
       for (int i = 0; i < collectEventList_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
@@ -50277,70 +50388,36 @@ public final class NetworkCollect {
 
       /**
        * <pre>
-       *界面分页参数
+       *采集信息总数
        * </pre>
        *
-       * <code>.PageEntity pageInfo = 4;</code>
+       * <code>int32 count = 4;</code>
        */
-      public boolean hasPageInfo() {
-        return instance.hasPageInfo();
+      public int getCount() {
+        return instance.getCount();
       }
       /**
        * <pre>
-       *界面分页参数
+       *采集信息总数
        * </pre>
        *
-       * <code>.PageEntity pageInfo = 4;</code>
+       * <code>int32 count = 4;</code>
        */
-      public com.networkcollect.NetworkCollect.PageEntity getPageInfo() {
-        return instance.getPageInfo();
-      }
-      /**
-       * <pre>
-       *界面分页参数
-       * </pre>
-       *
-       * <code>.PageEntity pageInfo = 4;</code>
-       */
-      public Builder setPageInfo(com.networkcollect.NetworkCollect.PageEntity value) {
+      public Builder setCount(int value) {
         copyOnWrite();
-        instance.setPageInfo(value);
-        return this;
-        }
-      /**
-       * <pre>
-       *界面分页参数
-       * </pre>
-       *
-       * <code>.PageEntity pageInfo = 4;</code>
-       */
-      public Builder setPageInfo(
-          com.networkcollect.NetworkCollect.PageEntity.Builder builderForValue) {
-        copyOnWrite();
-        instance.setPageInfo(builderForValue);
+        instance.setCount(value);
         return this;
       }
       /**
        * <pre>
-       *界面分页参数
+       *采集信息总数
        * </pre>
        *
-       * <code>.PageEntity pageInfo = 4;</code>
+       * <code>int32 count = 4;</code>
        */
-      public Builder mergePageInfo(com.networkcollect.NetworkCollect.PageEntity value) {
+      public Builder clearCount() {
         copyOnWrite();
-        instance.mergePageInfo(value);
-        return this;
-      }
-      /**
-       * <pre>
-       *界面分页参数
-       * </pre>
-       *
-       * <code>.PageEntity pageInfo = 4;</code>
-       */
-      public Builder clearPageInfo() {  copyOnWrite();
-        instance.clearPageInfo();
+        instance.clearCount();
         return this;
       }
 
@@ -50517,7 +50594,8 @@ public final class NetworkCollect {
           pageSize_ = visitor.visitInt(pageSize_ != 0, pageSize_,
               other.pageSize_ != 0, other.pageSize_);
           searchParams_ = visitor.visitMessage(searchParams_, other.searchParams_);
-          pageInfo_ = visitor.visitMessage(pageInfo_, other.pageInfo_);
+          count_ = visitor.visitInt(count_ != 0, count_,
+              other.count_ != 0, other.count_);
           collectEventList_= visitor.visitList(collectEventList_, other.collectEventList_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
@@ -50567,17 +50645,9 @@ public final class NetworkCollect {
 
                   break;
                 }
-                case 34: {
-                  com.networkcollect.NetworkCollect.PageEntity.Builder subBuilder = null;
-                  if (pageInfo_ != null) {
-                    subBuilder = pageInfo_.toBuilder();
-                  }
-                  pageInfo_ = input.readMessage(com.networkcollect.NetworkCollect.PageEntity.parser(), extensionRegistry);
-                  if (subBuilder != null) {
-                    subBuilder.mergeFrom(pageInfo_);
-                    pageInfo_ = subBuilder.buildPartial();
-                  }
+                case 32: {
 
+                  count_ = input.readInt32();
                   break;
                 }
                 case 42: {
@@ -53176,20 +53246,12 @@ public final class NetworkCollect {
 
     /**
      * <pre>
-     *界面分页参数
+     *上传事件总数
      * </pre>
      *
-     * <code>.PageEntity pageInfo = 4;</code>
+     * <code>int32 count = 4;</code>
      */
-    boolean hasPageInfo();
-    /**
-     * <pre>
-     *界面分页参数
-     * </pre>
-     *
-     * <code>.PageEntity pageInfo = 4;</code>
-     */
-    com.networkcollect.NetworkCollect.PageEntity getPageInfo();
+    int getCount();
 
     /**
      * <pre>
@@ -53379,80 +53441,39 @@ public final class NetworkCollect {
       
     }
 
-    public static final int PAGEINFO_FIELD_NUMBER = 4;
-    private com.networkcollect.NetworkCollect.PageEntity pageInfo_;
+    public static final int COUNT_FIELD_NUMBER = 4;
+    private int count_;
     /**
      * <pre>
-     *界面分页参数
+     *上传事件总数
      * </pre>
      *
-     * <code>.PageEntity pageInfo = 4;</code>
+     * <code>int32 count = 4;</code>
      */
-    public boolean hasPageInfo() {
-      return pageInfo_ != null;
+    public int getCount() {
+      return count_;
     }
     /**
      * <pre>
-     *界面分页参数
+     *上传事件总数
      * </pre>
      *
-     * <code>.PageEntity pageInfo = 4;</code>
+     * <code>int32 count = 4;</code>
      */
-    public com.networkcollect.NetworkCollect.PageEntity getPageInfo() {
-      return pageInfo_ == null ? com.networkcollect.NetworkCollect.PageEntity.getDefaultInstance() : pageInfo_;
+    private void setCount(int value) {
+      
+      count_ = value;
     }
     /**
      * <pre>
-     *界面分页参数
+     *上传事件总数
      * </pre>
      *
-     * <code>.PageEntity pageInfo = 4;</code>
+     * <code>int32 count = 4;</code>
      */
-    private void setPageInfo(com.networkcollect.NetworkCollect.PageEntity value) {
-      if (value == null) {
-        throw new NullPointerException();
-      }
-      pageInfo_ = value;
+    private void clearCount() {
       
-      }
-    /**
-     * <pre>
-     *界面分页参数
-     * </pre>
-     *
-     * <code>.PageEntity pageInfo = 4;</code>
-     */
-    private void setPageInfo(
-        com.networkcollect.NetworkCollect.PageEntity.Builder builderForValue) {
-      pageInfo_ = builderForValue.build();
-      
-    }
-    /**
-     * <pre>
-     *界面分页参数
-     * </pre>
-     *
-     * <code>.PageEntity pageInfo = 4;</code>
-     */
-    private void mergePageInfo(com.networkcollect.NetworkCollect.PageEntity value) {
-      if (pageInfo_ != null &&
-          pageInfo_ != com.networkcollect.NetworkCollect.PageEntity.getDefaultInstance()) {
-        pageInfo_ =
-          com.networkcollect.NetworkCollect.PageEntity.newBuilder(pageInfo_).mergeFrom(value).buildPartial();
-      } else {
-        pageInfo_ = value;
-      }
-      
-    }
-    /**
-     * <pre>
-     *界面分页参数
-     * </pre>
-     *
-     * <code>.PageEntity pageInfo = 4;</code>
-     */
-    private void clearPageInfo() {  pageInfo_ = null;
-      
+      count_ = 0;
     }
 
     public static final int UPLOADEVENTLIST_FIELD_NUMBER = 5;
@@ -53642,8 +53663,8 @@ public final class NetworkCollect {
       if (searchParams_ != null) {
         output.writeMessage(3, getSearchParams());
       }
-      if (pageInfo_ != null) {
-        output.writeMessage(4, getPageInfo());
+      if (count_ != 0) {
+        output.writeInt32(4, count_);
       }
       for (int i = 0; i < uploadEventList_.size(); i++) {
         output.writeMessage(5, uploadEventList_.get(i));
@@ -53667,9 +53688,9 @@ public final class NetworkCollect {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, getSearchParams());
       }
-      if (pageInfo_ != null) {
+      if (count_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, getPageInfo());
+          .computeInt32Size(4, count_);
       }
       for (int i = 0; i < uploadEventList_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
@@ -53919,70 +53940,36 @@ public final class NetworkCollect {
 
       /**
        * <pre>
-       *界面分页参数
+       *上传事件总数
        * </pre>
        *
-       * <code>.PageEntity pageInfo = 4;</code>
+       * <code>int32 count = 4;</code>
        */
-      public boolean hasPageInfo() {
-        return instance.hasPageInfo();
+      public int getCount() {
+        return instance.getCount();
       }
       /**
        * <pre>
-       *界面分页参数
+       *上传事件总数
        * </pre>
        *
-       * <code>.PageEntity pageInfo = 4;</code>
+       * <code>int32 count = 4;</code>
        */
-      public com.networkcollect.NetworkCollect.PageEntity getPageInfo() {
-        return instance.getPageInfo();
-      }
-      /**
-       * <pre>
-       *界面分页参数
-       * </pre>
-       *
-       * <code>.PageEntity pageInfo = 4;</code>
-       */
-      public Builder setPageInfo(com.networkcollect.NetworkCollect.PageEntity value) {
+      public Builder setCount(int value) {
         copyOnWrite();
-        instance.setPageInfo(value);
-        return this;
-        }
-      /**
-       * <pre>
-       *界面分页参数
-       * </pre>
-       *
-       * <code>.PageEntity pageInfo = 4;</code>
-       */
-      public Builder setPageInfo(
-          com.networkcollect.NetworkCollect.PageEntity.Builder builderForValue) {
-        copyOnWrite();
-        instance.setPageInfo(builderForValue);
+        instance.setCount(value);
         return this;
       }
       /**
        * <pre>
-       *界面分页参数
+       *上传事件总数
        * </pre>
        *
-       * <code>.PageEntity pageInfo = 4;</code>
+       * <code>int32 count = 4;</code>
        */
-      public Builder mergePageInfo(com.networkcollect.NetworkCollect.PageEntity value) {
+      public Builder clearCount() {
         copyOnWrite();
-        instance.mergePageInfo(value);
-        return this;
-      }
-      /**
-       * <pre>
-       *界面分页参数
-       * </pre>
-       *
-       * <code>.PageEntity pageInfo = 4;</code>
-       */
-      public Builder clearPageInfo() {  copyOnWrite();
-        instance.clearPageInfo();
+        instance.clearCount();
         return this;
       }
 
@@ -54159,7 +54146,8 @@ public final class NetworkCollect {
           pageSize_ = visitor.visitInt(pageSize_ != 0, pageSize_,
               other.pageSize_ != 0, other.pageSize_);
           searchParams_ = visitor.visitMessage(searchParams_, other.searchParams_);
-          pageInfo_ = visitor.visitMessage(pageInfo_, other.pageInfo_);
+          count_ = visitor.visitInt(count_ != 0, count_,
+              other.count_ != 0, other.count_);
           uploadEventList_= visitor.visitList(uploadEventList_, other.uploadEventList_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
@@ -54209,17 +54197,9 @@ public final class NetworkCollect {
 
                   break;
                 }
-                case 34: {
-                  com.networkcollect.NetworkCollect.PageEntity.Builder subBuilder = null;
-                  if (pageInfo_ != null) {
-                    subBuilder = pageInfo_.toBuilder();
-                  }
-                  pageInfo_ = input.readMessage(com.networkcollect.NetworkCollect.PageEntity.parser(), extensionRegistry);
-                  if (subBuilder != null) {
-                    subBuilder.mergeFrom(pageInfo_);
-                    pageInfo_ = subBuilder.buildPartial();
-                  }
+                case 32: {
 
+                  count_ = input.readInt32();
                   break;
                 }
                 case 42: {
@@ -54371,6 +54351,24 @@ public final class NetworkCollect {
      */
     com.google.protobuf.ByteString
         getEndTimeBytes();
+
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 7;</code>
+     */
+    java.lang.String getIp();
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 7;</code>
+     */
+    com.google.protobuf.ByteString
+        getIpBytes();
   }
   /**
    * <pre>
@@ -54389,6 +54387,7 @@ public final class NetworkCollect {
       keyWord_ = "";
       startTime_ = "";
       endTime_ = "";
+      ip_ = "";
     }
     public static final int TYPE_FIELD_NUMBER = 1;
     private java.lang.String type_;
@@ -54724,6 +54723,72 @@ public final class NetworkCollect {
       endTime_ = value.toStringUtf8();
     }
 
+    public static final int IP_FIELD_NUMBER = 7;
+    private java.lang.String ip_;
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 7;</code>
+     */
+    public java.lang.String getIp() {
+      return ip_;
+    }
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 7;</code>
+     */
+    public com.google.protobuf.ByteString
+        getIpBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(ip_);
+    }
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 7;</code>
+     */
+    private void setIp(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      ip_ = value;
+    }
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 7;</code>
+     */
+    private void clearIp() {
+      
+      ip_ = getDefaultInstance().getIp();
+    }
+    /**
+     * <pre>
+     *ip地址
+     * </pre>
+     *
+     * <code>string ip = 7;</code>
+     */
+    private void setIpBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      ip_ = value.toStringUtf8();
+    }
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (!type_.isEmpty()) {
@@ -54743,6 +54808,9 @@ public final class NetworkCollect {
       }
       if (!endTime_.isEmpty()) {
         output.writeString(6, getEndTime());
+      }
+      if (!ip_.isEmpty()) {
+        output.writeString(7, getIp());
       }
     }
 
@@ -54774,6 +54842,10 @@ public final class NetworkCollect {
       if (!endTime_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeStringSize(6, getEndTime());
+      }
+      if (!ip_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(7, getIp());
       }
       memoizedSerializedSize = size;
       return size;
@@ -55188,6 +55260,66 @@ public final class NetworkCollect {
         return this;
       }
 
+      /**
+       * <pre>
+       *ip地址
+       * </pre>
+       *
+       * <code>string ip = 7;</code>
+       */
+      public java.lang.String getIp() {
+        return instance.getIp();
+      }
+      /**
+       * <pre>
+       *ip地址
+       * </pre>
+       *
+       * <code>string ip = 7;</code>
+       */
+      public com.google.protobuf.ByteString
+          getIpBytes() {
+        return instance.getIpBytes();
+      }
+      /**
+       * <pre>
+       *ip地址
+       * </pre>
+       *
+       * <code>string ip = 7;</code>
+       */
+      public Builder setIp(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setIp(value);
+        return this;
+      }
+      /**
+       * <pre>
+       *ip地址
+       * </pre>
+       *
+       * <code>string ip = 7;</code>
+       */
+      public Builder clearIp() {
+        copyOnWrite();
+        instance.clearIp();
+        return this;
+      }
+      /**
+       * <pre>
+       *ip地址
+       * </pre>
+       *
+       * <code>string ip = 7;</code>
+       */
+      public Builder setIpBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setIpBytes(value);
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:LogsSearchParam)
     }
     @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
@@ -55222,6 +55354,8 @@ public final class NetworkCollect {
               !other.startTime_.isEmpty(), other.startTime_);
           endTime_ = visitor.visitString(!endTime_.isEmpty(), endTime_,
               !other.endTime_.isEmpty(), other.endTime_);
+          ip_ = visitor.visitString(!ip_.isEmpty(), ip_,
+              !other.ip_.isEmpty(), other.ip_);
           if (visitor == com.google.protobuf.GeneratedMessageLite.MergeFromVisitor
               .INSTANCE) {
           }
@@ -55278,6 +55412,12 @@ public final class NetworkCollect {
                   String s = input.readStringRequireUtf8();
 
                   endTime_ = s;
+                  break;
+                }
+                case 58: {
+                  String s = input.readStringRequireUtf8();
+
+                  ip_ = s;
                   break;
                 }
               }

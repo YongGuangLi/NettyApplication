@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.core.RedisTemplate; 
 import org.springframework.stereotype.Component;
 
-import com.application.KryoRedisSerializer;
+import com.application.CustomRedisSerializer;
 import com.github.pagehelper.Page;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.networkcollect.NetworkCollect;
@@ -53,7 +53,7 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 	
 	@Autowired(required = false) 
 	public void setRedisTemplate(RedisTemplate redisTemplate) {
-		KryoRedisSerializer stringSerializer = new KryoRedisSerializer();
+		CustomRedisSerializer stringSerializer = new CustomRedisSerializer();
 	    redisTemplate.setKeySerializer(stringSerializer);
 	    redisTemplate.setValueSerializer(stringSerializer);
 	    redisTemplate.setHashKeySerializer(stringSerializer);
@@ -189,14 +189,22 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 		uploadEventAndDescribeBuilder.setSubType(uploadEventAndDescribe.getSubType()); 
 		uploadEventAndDescribeBuilder.setDesmap(uploadEventAndDescribe.getDesmap()); 
 		uploadEventAndDescribeBuilder.setEventId(uploadEventAndDescribe.getEventId()); 
+		
 		String identify = uploadEventAndDescribe.getIdentify() == null ? "" : uploadEventAndDescribe.getIdentify();
 		uploadEventAndDescribeBuilder.setIdentify(identify);
+		
 		uploadEventAndDescribeBuilder.setContent(uploadEventAndDescribe.getContent());
+		
 		int eventNumber = uploadEventAndDescribe.getEventNumber() == null ? 0 : uploadEventAndDescribe.getEventNumber();  
 		uploadEventAndDescribeBuilder.setEventNumber(eventNumber);
+		
 		uploadEventAndDescribeBuilder.setRepeatNum(uploadEventAndDescribe.getRepeatNum());
-		uploadEventAndDescribeBuilder.setEventdescribe(uploadEventAndDescribe.getEventdescribe());
-		uploadEventAndDescribeBuilder.setContentdescribe(uploadEventAndDescribe.getContentdescribe());  
+		
+		String eventdescribe = uploadEventAndDescribe.getEventdescribe() == null ? "" : uploadEventAndDescribe.getEventdescribe();
+		uploadEventAndDescribeBuilder.setEventdescribe(eventdescribe);
+		
+		String contentdescribe = uploadEventAndDescribe.getContentdescribe() == null ? "" : uploadEventAndDescribe.getContentdescribe();
+		uploadEventAndDescribeBuilder.setContentdescribe(contentdescribe);  
 		
 		return uploadEventAndDescribeBuilder;
 	}
@@ -258,16 +266,24 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 		assetsDeviceEntityBuilder.setIp(assetsDeviceEntity.getIp());
 		assetsDeviceEntityBuilder.setMac(assetsDeviceEntity.getMac());
 		assetsDeviceEntityBuilder.setSerialnumber(assetsDeviceEntity.getSerialnumber());
+		
 		String factorydec = assetsDeviceEntity.getFactorydec() == null ? "" : assetsDeviceEntity.getFactorydec();
 		assetsDeviceEntityBuilder.setFactorydec(factorydec); 
+		
 		String Factoryname = assetsDeviceEntity.getFactoryname() == null ? "" : assetsDeviceEntity.getFactoryname();
 		assetsDeviceEntityBuilder.setFactoryname(Factoryname);
+		
 		String Iptwo = assetsDeviceEntity.getIptwo() == null ? "" : assetsDeviceEntity.getIptwo();
 		assetsDeviceEntityBuilder.setIptwo(Iptwo);
-		assetsDeviceEntityBuilder.setMactwo(assetsDeviceEntity.getMactwo());
+		
+		String Mactwo = assetsDeviceEntity.getMactwo() == null ? "" : assetsDeviceEntity.getMactwo(); 
+		assetsDeviceEntityBuilder.setMactwo(Mactwo);
+		
 		assetsDeviceEntityBuilder.setDevicetype(assetsDeviceEntity.getDevicetype()); 
+		
 		String Publicname = assetsDeviceEntity.getPublicname() == null ? "" :assetsDeviceEntity.getPublicname();
 		assetsDeviceEntityBuilder.setPublicname(Publicname);
+		
 		assetsDeviceEntityBuilder.setSystemVersion(assetsDeviceEntity.getSystemVersion());
 		assetsDeviceEntityBuilder.setHold(assetsDeviceEntity.getHold());
 		assetsDeviceEntityBuilder.setSnmpVersion(assetsDeviceEntity.getSnmpVersion());
@@ -276,6 +292,7 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 		assetsDeviceEntityBuilder.setSnmpv3AuthAlgo(assetsDeviceEntity.getSnmpv3AuthAlgo());
 		assetsDeviceEntityBuilder.setSnmpRead(assetsDeviceEntity.getSnmpRead());
 		assetsDeviceEntityBuilder.setSnmpWrite(assetsDeviceEntity.getSnmpWrite());
+		
 		int Isonline =assetsDeviceEntity.getIsonline() == null ? 0 :assetsDeviceEntity.getIsonline();
 		assetsDeviceEntityBuilder.setIsonline(Isonline);
 		
@@ -631,14 +648,74 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			mainMessageBuilder.setInsertLog(insertLogBuilder);
 			break;
 		case MessageHead.getIsCover:
+			boolean getIsCover = (boolean) object;
+			mainMessageBuilder.setMsgType(MsgHeadType.HT_GetIsCover);
+			
+			NetworkCollect.GetIsCover.Builder getIsCoverBuilder = NetworkCollect.GetIsCover.newBuilder();
+			getIsCoverBuilder.setFlag(getIsCover);
+			
+			mainMessageBuilder.setGetIsCover(getIsCoverBuilder); 
+			System.out.println("获取当前是否覆盖旧的审计记录:" + getIsCover);
 			break;
 		case MessageHead.setIsCoverLogs:
+			Map<String, Object> mapSetIsCoverLogs = (Map<String, Object>) object;
+			
+			mainMessageBuilder.setMsgType(MsgHeadType.HT_SetIsCoverLogs);
+			NetworkCollect.SetIsCoverLogs.Builder setIsCoverLogsBuilder = NetworkCollect.SetIsCoverLogs.newBuilder();
+			
+			boolean covered = (boolean)mapSetIsCoverLogs.get("covered");
+			setIsCoverLogsBuilder.setCovered(covered);
+			
+			boolean coveredResult  = (boolean)mapSetIsCoverLogs.get("result");
+			setIsCoverLogsBuilder.setResult(coveredResult);
+			System.out.println("设置当前是否覆盖旧的审计记录:" + coveredResult);
 			break;
 		case MessageHead.checkLogsAccount:
 			break;
 		case MessageHead.backupLogsTable:
 			break;
 		case MessageHead.exportLogsChart:
+			Map<String, Object> mapExportLogsChart = (Map<String, Object>) object;
+			
+			mainMessageBuilder.setMsgType(MsgHeadType.HT_ExportLogsChart);
+			
+			NetworkCollect.ExportLogsChart.Builder exportLogsChartBuilder = NetworkCollect.ExportLogsChart.newBuilder();
+			
+			Map<String, Integer> mapReportByType = (Map<String, Integer>)mapExportLogsChart.get("reportByType");
+			for(Map.Entry<String, Integer> entry : mapReportByType.entrySet()){
+				String type = entry.getKey();
+				int num = entry.getValue(); 
+				
+				NetworkCollect.ReportTypeMatchNum.Builder reportTypeMatchNumBuilder = NetworkCollect.ReportTypeMatchNum.newBuilder();
+				reportTypeMatchNumBuilder.setLogType(type);
+				reportTypeMatchNumBuilder.setLogNum(num);
+			
+				exportLogsChartBuilder.addReportByType(reportTypeMatchNumBuilder);
+			}
+			
+			Map<String, Map<String, Integer>> mapReportByLevelAndType = ( Map<String, Map<String, Integer>>)mapExportLogsChart.get("reportByLevelAndType");
+			for(Map.Entry<String, Map<String, Integer>> entry : mapReportByLevelAndType.entrySet()){
+				String Level = entry.getKey();
+				Map<String, Integer> mapReportTypeMatchNum = entry.getValue();   
+				
+				NetworkCollect.ReportLevelAndTypeMatchNum.Builder reportLevelAndTypeMatchNumBuilder = NetworkCollect.ReportLevelAndTypeMatchNum.newBuilder();
+				reportLevelAndTypeMatchNumBuilder.setLevel(Level);
+				for(Map.Entry<String, Integer> entryReportByType : mapReportTypeMatchNum.entrySet()){
+					String type = entryReportByType.getKey();
+					int num = entryReportByType.getValue(); 
+					
+					NetworkCollect.ReportTypeMatchNum.Builder reportTypeMatchNumBuilder = NetworkCollect.ReportTypeMatchNum.newBuilder();
+					reportTypeMatchNumBuilder.setLogType(type);
+					reportTypeMatchNumBuilder.setLogNum(num);
+				
+					reportLevelAndTypeMatchNumBuilder.addLogNumList(reportTypeMatchNumBuilder);
+				}
+				
+				exportLogsChartBuilder.addReportByLevelAndType(reportLevelAndTypeMatchNumBuilder);
+			}
+			mainMessageBuilder.setExportLogsChart(exportLogsChartBuilder);
+			
+			System.out.println("导出日志报表-完成");
 			break;
 		case MessageHead.getCollectNumber:
 			break;
@@ -649,10 +726,8 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_GetCollectList);
 			NetworkCollect.GetCollectList.Builder getCollectListBuilder = NetworkCollect.GetCollectList.newBuilder();
 			
-			Integer count = (Integer)mapCollectList.get("count");
-			 
-//			NetworkCollect.PageEntity.Builder pageEntityBuilder = getPageEntityBuilder(getCollectListPage);
-//			getCollectListBuilder.setPageInfo(pageEntityBuilder); 
+			Integer collectListCount = (Integer)mapCollectList.get("count"); 
+			getCollectListBuilder.setCount(collectListCount); 
 			
 			List<CollectEventAndDescribe> listCollectEventAndDescribe = (List<CollectEventAndDescribe>)mapCollectList.get("collectEventList");
 			System.out.println("listCollectEventAndDescribeSize:" + listCollectEventAndDescribe.size());
@@ -672,8 +747,7 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			Map<String, Object> mapAllRole = (Map<String, Object>) object;
 			
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_GetAllRole);
-			NetworkCollect.GetAllRole.Builder getAllRoleBuilder = NetworkCollect.GetAllRole.newBuilder(); 
-	  
+			NetworkCollect.GetAllRole.Builder getAllRoleBuilder = NetworkCollect.GetAllRole.newBuilder();  
 			 
 			Page<?> page = (Page<?>)mapAllRole.get("page");
 			NetworkCollect.PageEntity.Builder getAllRolePageEntityBuilder = getPageEntityBuilder(page);
@@ -1369,11 +1443,9 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			 
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_GetUploadList);
 			NetworkCollect.GetUploadList.Builder getUploadListBuilder = NetworkCollect.GetUploadList.newBuilder();
-			
-			PageEntity getUploadListPage = (PageEntity)mapUploadList.get("page");
 			 
-			NetworkCollect.PageEntity.Builder uploadListPageEntityBuilder = getPageEntityBuilder(getUploadListPage);
-			getUploadListBuilder.setPageInfo(uploadListPageEntityBuilder); 
+			Integer uploadCount = (Integer)mapUploadList.get("count"); 
+			getUploadListBuilder.setCount(uploadCount); 
 			
 			List<UploadEventAndDescribe> listUploadEventAndDescribe = (List<UploadEventAndDescribe>)mapUploadList.get("uploadEventList");
 			for (int i = 0; i < listUploadEventAndDescribe.size(); i++) {
