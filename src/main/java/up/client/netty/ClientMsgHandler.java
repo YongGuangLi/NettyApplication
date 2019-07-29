@@ -61,6 +61,8 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 	    this.redisTemplate = redisTemplate;
 	}
 	
+	
+	
 	public NetworkCollect.UserEntity.Builder getUserEntityBuilder(UserEntity userEntity){
 		NetworkCollect.UserEntity.Builder userEntityBuilder = NetworkCollect.UserEntity.newBuilder(); 
 		
@@ -69,7 +71,7 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 		userEntityBuilder.setRealname(userEntity.getRealname());
 		userEntityBuilder.setRoleid(userEntity.getRoleid());
 		userEntityBuilder.setGroupid(userEntity.getGroupid());
-		userEntityBuilder.setPassword(userEntity.getPassword());   
+		userEntityBuilder.setPassword(userEntity.getPassword());    
 		
 		String telnumber = userEntity.getTelnumber() == null ? "" : userEntity.getTelnumber();
 		userEntityBuilder.setTelnumber(telnumber);
@@ -586,14 +588,15 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			mainMessageBuilder.setModifyPasswordByAdmin(modifyPasswordByAdminBuilder);
 			break;
 		case MessageHead.modifyPassword: 
-			int modifyPasswordResult = (int) object;
+			Map<String, Object> modifyPasswordResult = (Map<String, Object>) object;
 			
+			System.out.println(modifyPasswordResult);
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_ModifyPassword);
 
 			NetworkCollect.ModifyPassword.Builder modifyPasswordBuilder = NetworkCollect.ModifyPassword.newBuilder();
 			
-			modifyPasswordBuilder.setResult(modifyPasswordResult);
-			System.out.println("用户修改密码结果:" + modifyPasswordResult);
+			modifyPasswordBuilder.setResult((int)modifyPasswordResult.get("flag"));
+			System.out.println("用户修改密码结果:" + (int)modifyPasswordResult.get("flag"));
 			mainMessageBuilder.setModifyPassword(modifyPasswordBuilder);
 			break; 
 		case MessageHead.getLogs:
@@ -966,18 +969,24 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_GetNetworkInterfaces);  
 			NetworkCollect.GetNetworkInterfaces.Builder getNetworkInterfacesBuilder = NetworkCollect.GetNetworkInterfaces.newBuilder();
 			
-			for (Map.Entry<String, List<Map<String, String>>> entry : mapNetworkInterfaces.entrySet()) { 
-				List<Map<String, String>> listNetworkInterfaces = entry.getValue();
-				for (int i = 0; i < listNetworkInterfaces.size(); i++) {
-					Map<String, String> mapNetworkInterfacesParas = listNetworkInterfaces.get(i);
+			System.out.println(mapNetworkInterfaces);
+			
+			for (Map.Entry<String, List<Map<String, String>>> entry : mapNetworkInterfaces.entrySet()) {  
+			 
+				if(entry.getKey().compareTo("list") == 0){
+					List<Map<String, String>> listNetworkInterfaces = entry.getValue();
+					 
+					for (int i = 0; i < listNetworkInterfaces.size(); i++) {
+						Map<String, String> mapNetworkInterfacesParas = listNetworkInterfaces.get(i);
+			 
+						NetworkCollect.NetworkConfigInfo.Builder networkConfigInfoBuilder = NetworkCollect.NetworkConfigInfo.newBuilder(); 
+						networkConfigInfoBuilder.setName(mapNetworkInterfacesParas.get("interfacename")); 
+						networkConfigInfoBuilder.setHostaddr(mapNetworkInterfacesParas.get("hostaddr"));  
+						networkConfigInfoBuilder.setSubnetmask(mapNetworkInterfacesParas.get("subnetmask"));    
 					
-					NetworkCollect.NetworkConfigInfo.Builder networkConfigInfoBuilder = NetworkCollect.NetworkConfigInfo.newBuilder(); 
-					networkConfigInfoBuilder.setName(mapNetworkInterfacesParas.get("interfacename")); 
-					networkConfigInfoBuilder.setHostaddr(mapNetworkInterfacesParas.get("hostaddr"));  
-					networkConfigInfoBuilder.setSubnetmask(mapNetworkInterfacesParas.get("subnetmask"));   
-					
-					getNetworkInterfacesBuilder.addConfigInfo(networkConfigInfoBuilder);
-				} 
+						getNetworkInterfacesBuilder.addConfigInfo(networkConfigInfoBuilder);
+					} 
+				}
 			}
 			
 			System.out.println("获取网卡配置参数-完成");
@@ -1225,7 +1234,7 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			List<CertificateEntity> listCertificateEntity = (List<CertificateEntity>) mapCertificatePanel.get("certificates");
 			for (int i = 0; i < listCertificateEntity.size(); i++) {
 				CertificateEntity certificateEntity = listCertificateEntity.get(i);
-				
+ 
 				NetworkCollect.CertificateEntity.Builder certificateEntityBuilder = getCertificateEntityBuilder(certificateEntity);
 				 
 				initCertificatePanelBuilder.addCertificateInfo(certificateEntityBuilder);
