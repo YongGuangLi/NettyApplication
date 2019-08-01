@@ -60237,9 +60237,9 @@ public final class NetworkCollect {
      *true表示覆盖旧的审计记录，false表示不覆盖
      * </pre>
      *
-     * <code>bool flag = 1;</code>
+     * <code>int32 flag = 1;</code>
      */
-    boolean getFlag();
+    int getFlag();
 
     /**
      * <pre>
@@ -60274,15 +60274,15 @@ public final class NetworkCollect {
     private SetIsCoverLogs() {
     }
     public static final int FLAG_FIELD_NUMBER = 1;
-    private boolean flag_;
+    private int flag_;
     /**
      * <pre>
      *true表示覆盖旧的审计记录，false表示不覆盖
      * </pre>
      *
-     * <code>bool flag = 1;</code>
+     * <code>int32 flag = 1;</code>
      */
-    public boolean getFlag() {
+    public int getFlag() {
       return flag_;
     }
     /**
@@ -60290,9 +60290,9 @@ public final class NetworkCollect {
      *true表示覆盖旧的审计记录，false表示不覆盖
      * </pre>
      *
-     * <code>bool flag = 1;</code>
+     * <code>int32 flag = 1;</code>
      */
-    private void setFlag(boolean value) {
+    private void setFlag(int value) {
       
       flag_ = value;
     }
@@ -60301,11 +60301,11 @@ public final class NetworkCollect {
      *true表示覆盖旧的审计记录，false表示不覆盖
      * </pre>
      *
-     * <code>bool flag = 1;</code>
+     * <code>int32 flag = 1;</code>
      */
     private void clearFlag() {
       
-      flag_ = false;
+      flag_ = 0;
     }
 
     public static final int COVERED_FIELD_NUMBER = 2;
@@ -60380,8 +60380,8 @@ public final class NetworkCollect {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (flag_ != false) {
-        output.writeBool(1, flag_);
+      if (flag_ != 0) {
+        output.writeInt32(1, flag_);
       }
       if (covered_ != false) {
         output.writeBool(2, covered_);
@@ -60396,9 +60396,9 @@ public final class NetworkCollect {
       if (size != -1) return size;
 
       size = 0;
-      if (flag_ != false) {
+      if (flag_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(1, flag_);
+          .computeInt32Size(1, flag_);
       }
       if (covered_ != false) {
         size += com.google.protobuf.CodedOutputStream
@@ -60516,9 +60516,9 @@ public final class NetworkCollect {
        *true表示覆盖旧的审计记录，false表示不覆盖
        * </pre>
        *
-       * <code>bool flag = 1;</code>
+       * <code>int32 flag = 1;</code>
        */
-      public boolean getFlag() {
+      public int getFlag() {
         return instance.getFlag();
       }
       /**
@@ -60526,9 +60526,9 @@ public final class NetworkCollect {
        *true表示覆盖旧的审计记录，false表示不覆盖
        * </pre>
        *
-       * <code>bool flag = 1;</code>
+       * <code>int32 flag = 1;</code>
        */
-      public Builder setFlag(boolean value) {
+      public Builder setFlag(int value) {
         copyOnWrite();
         instance.setFlag(value);
         return this;
@@ -60538,7 +60538,7 @@ public final class NetworkCollect {
        *true表示覆盖旧的审计记录，false表示不覆盖
        * </pre>
        *
-       * <code>bool flag = 1;</code>
+       * <code>int32 flag = 1;</code>
        */
       public Builder clearFlag() {
         copyOnWrite();
@@ -60638,8 +60638,8 @@ public final class NetworkCollect {
         case VISIT: {
           Visitor visitor = (Visitor) arg0;
           com.networkcollect.NetworkCollect.SetIsCoverLogs other = (com.networkcollect.NetworkCollect.SetIsCoverLogs) arg1;
-          flag_ = visitor.visitBoolean(flag_ != false, flag_,
-              other.flag_ != false, other.flag_);
+          flag_ = visitor.visitInt(flag_ != 0, flag_,
+              other.flag_ != 0, other.flag_);
           covered_ = visitor.visitBoolean(covered_ != false, covered_,
               other.covered_ != false, other.covered_);
           result_ = visitor.visitBoolean(result_ != false, result_,
@@ -60670,7 +60670,7 @@ public final class NetworkCollect {
                 }
                 case 8: {
 
-                  flag_ = input.readBool();
+                  flag_ = input.readInt32();
                   break;
                 }
                 case 16: {

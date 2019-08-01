@@ -287,7 +287,10 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 		assetsDeviceEntityBuilder.setPublicname(Publicname);
 		
 		assetsDeviceEntityBuilder.setSystemVersion(assetsDeviceEntity.getSystemVersion());
-		assetsDeviceEntityBuilder.setHold(assetsDeviceEntity.getHold());
+		
+		int getHold = assetsDeviceEntity.getHold() == null ? 0 : assetsDeviceEntity.getHold();
+		assetsDeviceEntityBuilder.setHold(getHold);
+		
 		assetsDeviceEntityBuilder.setSnmpVersion(assetsDeviceEntity.getSnmpVersion());
 		assetsDeviceEntityBuilder.setSnmpv3Username(assetsDeviceEntity.getSnmpv3Username());
 		assetsDeviceEntityBuilder.setSnmpv3EncryptAlgo(assetsDeviceEntity.getSnmpv3EncryptAlgo());
@@ -443,20 +446,22 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			mainMessageBuilder.setDeleteUser(deleteUserBuilder);
 			break;
 		case MessageHead.createUser:
-			int createUserResult = (int) object;
+			Map<String, Object> mapCreateUserResult = (Map<String, Object>) object;
 			
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_CreateUser);
 			NetworkCollect.CreateUser.Builder createUserBuilder = NetworkCollect.CreateUser.newBuilder();
+			int createUserResult = (int)mapCreateUserResult.get("num");
 			createUserBuilder.setResult(createUserResult);
 			
 			System.out.println("新增用户结果:" + createUserResult);
 			mainMessageBuilder.setCreateUser(createUserBuilder);
 			break;
 		case MessageHead.updateUser:
-			int updateUserResult = (int) object;
+			Map<String, Object> mapUpdateUserResult = (Map<String, Object>) object;
 			
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_UpdateUser);
 			NetworkCollect.UpdateUser.Builder updateUserBuilder = NetworkCollect.UpdateUser.newBuilder();
+			int updateUserResult = (int)mapUpdateUserResult.get("num");
 			updateUserBuilder.setResult(updateUserResult);
 			
 			System.out.println("更新用户结果:" + updateUserResult);
@@ -475,7 +480,7 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			mainMessageBuilder.setDeleteUserGroup(deleteUserGroupBuilder); 
 			break;
 		case MessageHead.createUserGroup:
-			Map<String,Object> mapCreateUserGroup = (Map<String,Object>) object;
+			Map<String, Object> mapCreateUserGroup = (Map<String,Object>) object;
 			 
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_CreateUserGroup);
 			NetworkCollect.CreateUserGroup.Builder createUserGroupBuilder = NetworkCollect.CreateUserGroup.newBuilder();
@@ -578,11 +583,12 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			mainMessageBuilder.setUpdateUsersRoleId(updateUsersRoleIdBuilder);
 			break;
 		case MessageHead.modifyPasswordByAdmin:
-			int modifyPasswordByAdminResult = (int) object;
+			Map<String, Object> mapModifyPasswordByAdminResult = (Map<String, Object>) object;
 			
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_ModifyPasswordByAdmin);
 			NetworkCollect.ModifyPasswordByAdmin.Builder modifyPasswordByAdminBuilder = NetworkCollect.ModifyPasswordByAdmin.newBuilder();
 			
+			int modifyPasswordByAdminResult = (int)mapModifyPasswordByAdminResult.get("flag");
 			modifyPasswordByAdminBuilder.setResult(modifyPasswordByAdminResult);
 			System.out.println("管理员修改密码结果:" + modifyPasswordByAdminResult);
 			mainMessageBuilder.setModifyPasswordByAdmin(modifyPasswordByAdminBuilder);
@@ -654,11 +660,12 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			boolean getIsCover = (boolean) object;
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_GetIsCover);
 			
+			boolean isCover = getIsCover == true ? true : false;
 			NetworkCollect.GetIsCover.Builder getIsCoverBuilder = NetworkCollect.GetIsCover.newBuilder();
-			getIsCoverBuilder.setFlag(getIsCover);
+			getIsCoverBuilder.setFlag(isCover);
 			
 			mainMessageBuilder.setGetIsCover(getIsCoverBuilder); 
-			System.out.println("获取当前是否覆盖旧的审计记录:" + getIsCover);
+			System.out.println("获取当前是否覆盖旧的审计记录:" + isCover);
 			break;
 		case MessageHead.setIsCoverLogs:
 			Map<String, Object> mapSetIsCoverLogs = (Map<String, Object>) object;
@@ -669,9 +676,10 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			boolean covered = (boolean)mapSetIsCoverLogs.get("covered");
 			setIsCoverLogsBuilder.setCovered(covered);
 			
-			boolean coveredResult  = (boolean)mapSetIsCoverLogs.get("result");
+			boolean coveredResult =  mapSetIsCoverLogs.get("result") == null ? true : false;
+			 
 			setIsCoverLogsBuilder.setResult(coveredResult);
-			System.out.println("设置当前是否覆盖旧的审计记录:" + coveredResult);
+			System.out.println("设置当前是否覆盖旧的审计记录:" + covered);
 			break;
 		case MessageHead.checkLogsAccount:
 			break;
@@ -760,10 +768,11 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			List<RoleEntity> listAllRoleEntity = (List<RoleEntity>) mapAllRole.get("list");
 			for (int i = 0; i < listAllRoleEntity.size(); i++) {
 				RoleEntity roleEntity = listAllRoleEntity.get(i);
-				
+	 
 				NetworkCollect.RoleEntity.Builder roleEntityBuilder = getRoleEntityBuilder(roleEntity);
 		 
 				List<UserEntity> listUserEntity = roleEntity.getUserEntities();
+			 
 				for (int j = 0; j < listUserEntity.size(); j++) {
 					UserEntity userEntity = listUserEntity.get(j); 
 					
@@ -883,7 +892,8 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			mainMessageBuilder.setSystemDataBackup(deleteConfBackupBuilder); 
 			break;
 		case MessageHead.getBackupDataDate:
-			List<BackupdataDateEntity> listBackupdataDateEntity = (List<BackupdataDateEntity>) object;
+			Map<String, Object> mapGetBackupDataDate = (Map<String, Object>)object;
+			List<BackupdataDateEntity> listBackupdataDateEntity = (List<BackupdataDateEntity>) mapGetBackupDataDate.get("list");
 			
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_GetBackupDataDate);
 			NetworkCollect.SystemDataBackup.Builder systemDataBackupBuilder = NetworkCollect.SystemDataBackup.newBuilder();
@@ -904,7 +914,9 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			mainMessageBuilder.setSystemDataBackup(systemDataBackupBuilder);
 			break;
 		case MessageHead.getBackupConfDate:
-			List<BackupconfDateEntity> listBackupconfDateEntity = (List<BackupconfDateEntity>) object;
+			Map<String, Object> mapGetBackupConfDate = (Map<String, Object>) object;
+			
+			List<BackupconfDateEntity> listBackupconfDateEntity = (List<BackupconfDateEntity>) mapGetBackupConfDate.get("list");
 			
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_GetBackupConfDate);
 			NetworkCollect.SystemDataBackup.Builder systemConfBackupBuilder = NetworkCollect.SystemDataBackup.newBuilder();
@@ -1371,25 +1383,26 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 			mainMessageBuilder.setInsertDevice(insertDeviceBuilder);
 			break;
 		case MessageHead.deleteDevice:
-			String deleteDeviceResult = (String) object;
+			Map<String, String> MapdeleteDevice = (Map<String, String>) object;
 			
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_DeleteDevice);
 			
 			NetworkCollect.DeleteDevice.Builder deleteDeviceBuilder = NetworkCollect.DeleteDevice.newBuilder();
-			deleteDeviceBuilder.setResult(deleteDeviceResult);
+			 
+			deleteDeviceBuilder.setResult(MapdeleteDevice.get("flag"));
 			
-			System.out.println("删除资产设备结果:" + deleteDeviceResult);
+			System.out.println("删除资产设备结果:" + MapdeleteDevice.get("flag"));
 			mainMessageBuilder.setDeleteDevice(deleteDeviceBuilder);
 			break;
 		case MessageHead.modifyDevice:
-			String modifyDeviceResult = (String) object;
+			Map<String, String> mapModifyDeviceResult = (Map<String, String>) object;
 			
 			mainMessageBuilder.setMsgType(MsgHeadType.HT_ModifyDevice);
 			
 			NetworkCollect.ModifyDevice.Builder modifyDeviceBuilder = NetworkCollect.ModifyDevice.newBuilder();
-			modifyDeviceBuilder.setResult(modifyDeviceResult);
+			modifyDeviceBuilder.setResult(mapModifyDeviceResult.get("flag"));
 			
-			System.out.println("更新资产设备结果:" + modifyDeviceResult);
+			System.out.println("更新资产设备结果:" + mapModifyDeviceResult.get("flag"));
 			mainMessageBuilder.setModifyDevice(modifyDeviceBuilder);
 			break;
 		case MessageHead.selectDeviceById:

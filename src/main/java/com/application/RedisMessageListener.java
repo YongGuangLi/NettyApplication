@@ -50,11 +50,23 @@ public class RedisMessageListener implements MessageListener {
 		this.redisTemplate = redisTemplate; 
 	} 
 	
+	String getEncodePasswd(String strValue){
+		String EncodePasswd = Encryptor.SM3(strValue) + strValue;    
+		return RSACoder.getEncodePasswd(EncodePasswd);	
+	} 
+	
 	String getSM3SigneValue(String strValue){
 		String SM3SigneValue = Encryptor.SM3(strValue) + strValue;   
 		byte[] encryptUser = RSACoder.handleByPublic(SM3SigneValue.getBytes(), 
 				Base64.decodeBase64(RSACoder.getPublicKeyString()), true);   
 		return bytesToHexString(encryptUser);	
+	} 
+	
+	String getSM3SigneValueBase64(String strValue){
+		String SM3SigneValue = Encryptor.SM3(strValue) + strValue;   
+		byte[] encryptUser = RSACoder.handleByPublic(SM3SigneValue.getBytes(), 
+				Base64.decodeBase64(RSACoder.getPublicKeyString()), true);   
+		return Base64.encodeBase64String(encryptUser);	
 	} 
 	
 	
@@ -107,7 +119,7 @@ public class RedisMessageListener implements MessageListener {
 			case HT_SetIsCoverLogs:
 				NetworkCollect.SetIsCoverLogs setIsCoverLogs = mainMessage.getSetIsCoverLogs();
 				pojoMessage = getSetIsCoverLogsMessage(setIsCoverLogs);
-				System.out.println("设置当前是否覆盖旧的审计记录");
+				System.out.println("设置当前是否覆盖旧的审计记录:" + setIsCoverLogs.getFlag());
 				break;
 			case HT_ExportLogs:
 				NetworkCollect.ExportLogs exportLogs = mainMessage.getExportLogs();
@@ -522,19 +534,42 @@ public class RedisMessageListener implements MessageListener {
 		return stringBuilder.toString();
 	}
  
-	public UserEntity getUserEntityBody(NetworkCollect.UserEntity userEntity){
+	public UserEntity getUserEntityBodyWithSM3(NetworkCollect.UserEntity userEntity){
 		UserEntity userEntityBody = new UserEntity();
 		  
 		userEntityBody.setId(userEntity.getId());
 		 
 		userEntityBody.setUsername(getSM3SigneValue(userEntity.getUsername())); 
+		
 		userEntityBody.setRealname(userEntity.getRealname());
 		userEntityBody.setRoleid(userEntity.getRoleid());
 		userEntityBody.setGroupid(userEntity.getGroupid()); 
-		userEntityBody.setPassword(getSM3SigneValue(userEntity.getPassword()));   
+		
+		userEntityBody.setPassword(getSM3SigneValueBase64(userEntity.getPassword()));   
+		
 		userEntityBody.setDescription(userEntity.getDescription());
 		userEntityBody.setUkey(userEntity.getUkey());
-		userEntityBody.setIfinner(userEntity.getIfinner());
+		userEntityBody.setIfinner(userEntity.getIfinner()); 
+		
+		return userEntityBody;
+	}
+	
+	public UserEntity getUserEntityBody(NetworkCollect.UserEntity userEntity){
+		UserEntity userEntityBody = new UserEntity();
+		  
+		userEntityBody.setId(userEntity.getId());
+		 
+		userEntityBody.setUsername(userEntity.getUsername()); 
+		
+		userEntityBody.setRealname(userEntity.getRealname());
+		userEntityBody.setRoleid(userEntity.getRoleid());
+		userEntityBody.setGroupid(userEntity.getGroupid()); 
+		
+		userEntityBody.setPassword(userEntity.getPassword());   
+		
+		userEntityBody.setDescription(userEntity.getDescription());
+		userEntityBody.setUkey(userEntity.getUkey());
+		userEntityBody.setIfinner(userEntity.getIfinner()); 
 		
 		return userEntityBody;
 	}
@@ -543,9 +578,13 @@ public class RedisMessageListener implements MessageListener {
 		RoleEntity roleEntityBody = new RoleEntity();
 		 
 		roleEntityBody.setId(roleEntity.getId());
+		System.out.println(roleEntity.getId());
 		roleEntityBody.setName(roleEntity.getName());
+		System.out.println(roleEntity.getName());
 		roleEntityBody.setRoletype(roleEntity.getRoletype());
+		System.out.println(roleEntity.getRoletype());
 		roleEntityBody.setDescription(roleEntity.getDescription());
+		System.out.println(roleEntity.getDescription());
 		roleEntityBody.setIfinner(roleEntity.getIfinner());
 		roleEntityBody.setRunstatus(roleEntity.getRunstatus());
 		roleEntityBody.setAssetsmanage(roleEntity.getAssetsmanage());
@@ -625,12 +664,8 @@ public class RedisMessageListener implements MessageListener {
 		pojoMessage.setHead(MessageHead.getCollectList); 
 		 
 		Map<String, Object> mapCollectSearchParam = new HashMap<String, Object>();  
-		
-		String userEntity = "operator";
-		String usernameSM3 = Encryptor.SM3(userEntity) + userEntity;   
-		byte[] encryptUser = RSACoder.handleByPublic(usernameSM3.getBytes(), 
-				Base64.decodeBase64(RSACoder.getPublicKeyString()), true);   
-		mapCollectSearchParam.put("username", bytesToHexString(encryptUser));	
+		 
+		mapCollectSearchParam.put("username", getSM3SigneValue(loginUserName));	
 		
 		mapCollectSearchParam.put("pageNumber", (Integer)getCollectList.getPageNumber());
 		mapCollectSearchParam.put("pageSize", (Integer)getCollectList.getPageSize());
@@ -664,12 +699,8 @@ public class RedisMessageListener implements MessageListener {
 		pojoMessage.setHead(MessageHead.getUploadList); 
 		
 		Map<String, Object> mapCollectSearchParam = new HashMap<String, Object>();  
-		
-		String userEntity = "operator";
-		String usernameSM3 = Encryptor.SM3(userEntity) + userEntity;   
-		byte[] encryptUser = RSACoder.handleByPublic(usernameSM3.getBytes(), 
-				Base64.decodeBase64(RSACoder.getPublicKeyString()), true);   
-		mapCollectSearchParam.put("username", bytesToHexString(encryptUser));	
+
+		mapCollectSearchParam.put("username", getSM3SigneValue(loginUserName));	
 		
 		mapCollectSearchParam.put("pageNumber", (Integer)getUploadList.getPageNumber());
 		mapCollectSearchParam.put("pageSize", (Integer)getUploadList.getPageSize());
@@ -702,13 +733,8 @@ public class RedisMessageListener implements MessageListener {
 		pojoMessage.setHead(MessageHead.getLogs);  
 		
 		Map<String, Object> mapLogSearchParas = new HashMap<String, Object>();
-		
-		String userEntity = "auditor";
-		String usernameSM3 = Encryptor.SM3(userEntity) + userEntity;   
-		byte[] encryptUser = RSACoder.handleByPublic(usernameSM3.getBytes(), 
-				Base64.decodeBase64(RSACoder.getPublicKeyString()), true);   
-		mapLogSearchParas.put("username", bytesToHexString(encryptUser));	
-		
+		   
+		mapLogSearchParas.put("username", getSM3SigneValue(loginUserName));	
 		mapLogSearchParas.put("pageNumber", (Integer)getLogs.getPageNumber()); 
 		mapLogSearchParas.put("pageSize", (Integer)getLogs.getPageSize());
 		 
@@ -738,8 +764,7 @@ public class RedisMessageListener implements MessageListener {
 	public up.common.nettypojo.Message getIsCoverMessage() {
 		up.common.nettypojo.Message pojoMessage = new up.common.nettypojo.Message();
 		pojoMessage.setHead(MessageHead.getIsCover);   
-		
-		
+		 
 		return pojoMessage;
 	}
 	
@@ -747,7 +772,8 @@ public class RedisMessageListener implements MessageListener {
 		up.common.nettypojo.Message pojoMessage = new up.common.nettypojo.Message();
 		pojoMessage.setHead(MessageHead.setIsCoverLogs);   
 		
-		pojoMessage.setBody(setIsCoverLogs.getCovered());
+		boolean isCover = setIsCoverLogs.getFlag() == 1 ? true : false;
+		pojoMessage.setBody(isCover);
 		
 		return pojoMessage;
 	}
@@ -788,12 +814,8 @@ public class RedisMessageListener implements MessageListener {
 		pojoMessage.setHead(MessageHead.getDevices); 
 		
 		Map<String, Object> mapGetDevicesParas = new HashMap<String, Object>();
-		
-		String userEntity = "operator";
-		String usernameSM3 = Encryptor.SM3(userEntity) + userEntity;   
-		byte[] encryptUser = RSACoder.handleByPublic(usernameSM3.getBytes(), 
-				Base64.decodeBase64(RSACoder.getPublicKeyString()), true);   
-		mapGetDevicesParas.put("username", bytesToHexString(encryptUser));	
+		  
+		mapGetDevicesParas.put("username", getSM3SigneValue(loginUserName));	
 		
 		mapGetDevicesParas.put("pageNumber", getDevices.getPageNumber());
 		mapGetDevicesParas.put("pageSize", getDevices.getPageSize());
@@ -919,7 +941,7 @@ public class RedisMessageListener implements MessageListener {
 		
 		Map<String,Object> mapInitCreateUserParas = new HashMap<String, Object>();  
 		
-		mapInitCreateUserParas.put("username", initCreateUser.getUsername());
+		mapInitCreateUserParas.put("username",  initCreateUser.getUsername());
 		mapInitCreateUserParas.put("flag", initCreateUser.getFlag());
 		
 		pojoMessage.setBody(mapInitCreateUserParas);
@@ -980,13 +1002,8 @@ public class RedisMessageListener implements MessageListener {
 		pojoMessage.setHead(MessageHead.getSVRDevice);
 		 
 		Map<String, Object> mapGetSVRDeviceParas = new HashMap<String, Object>();
-		
-		String usernameSM3 = Encryptor.SM3("operator") + "operator";  
-		
-		byte[] encryptUser = RSACoder.handleByPublic(usernameSM3.getBytes(), 
-				Base64.decodeBase64(RSACoder.getPublicKeyString()), true); 
-		
-		mapGetSVRDeviceParas.put("username", encryptUser);
+		  
+		mapGetSVRDeviceParas.put("username", getSM3SigneValue(loginUserName));
 		mapGetSVRDeviceParas.put("pageNum", getSvrDevices.getPageNum());
 		mapGetSVRDeviceParas.put("pageSize", getSvrDevices.getPageSize());
 		
@@ -1047,6 +1064,7 @@ public class RedisMessageListener implements MessageListener {
 		Map<String, String> mapDeviceIp = new HashMap<String, String>();
 		mapDeviceIp.put("ip", deviceIp);
 		pojoMessage.setBody(mapDeviceIp);
+		
 		return pojoMessage;
 	}
 	
@@ -1065,6 +1083,12 @@ public class RedisMessageListener implements MessageListener {
 	public up.common.nettypojo.Message getBackupDataDateMessage() {
 		up.common.nettypojo.Message pojoMessage = new up.common.nettypojo.Message();  
 		pojoMessage.setHead(MessageHead.getBackupDataDate);
+		
+		Map<String, Object> mapBackupDataDate = new HashMap<String, Object>(); 
+		mapBackupDataDate.put("username",  getSM3SigneValue(loginUserName));  
+		
+		pojoMessage.setBody(mapBackupDataDate);
+		
 		return pojoMessage;
 	}
 	
@@ -1094,6 +1118,12 @@ public class RedisMessageListener implements MessageListener {
 	public up.common.nettypojo.Message getBackupConfDateMessage() {
 		up.common.nettypojo.Message pojoMessage = new up.common.nettypojo.Message();  
 		pojoMessage.setHead(MessageHead.getBackupConfDate);
+		
+		Map<String, Object> mapBackupConfDate = new HashMap<String, Object>(); 
+		mapBackupConfDate.put("username",  getSM3SigneValue(loginUserName));  
+		
+		pojoMessage.setBody(mapBackupConfDate);
+		
 		return pojoMessage;
 	}
 
@@ -1124,14 +1154,8 @@ public class RedisMessageListener implements MessageListener {
 		up.common.nettypojo.Message pojoMessage = new up.common.nettypojo.Message();  
 		pojoMessage.setHead(MessageHead.generateLoginInfo);
 		
-		Map<String, Object> mapGenerateLoginInfoParam = new HashMap<String, Object>();
-		
-		String usernameSM3 = Encryptor.SM3(username) + username;  
-		
-		byte[] encryptUser = RSACoder.handleByPublic(usernameSM3.getBytes(), 
-				Base64.decodeBase64(RSACoder.getPublicKeyString()), true); 
-		
-		mapGenerateLoginInfoParam.put("username",  bytesToHexString(encryptUser)); 
+		Map<String, Object> mapGenerateLoginInfoParam = new HashMap<String, Object>(); 
+		mapGenerateLoginInfoParam.put("username",  getSM3SigneValue(username)); 
 		mapGenerateLoginInfoParam.put("subType", subType);
 		
 		pojoMessage.setBody(mapGenerateLoginInfoParam);
@@ -1180,14 +1204,9 @@ public class RedisMessageListener implements MessageListener {
 		
 		Map<String,Object> mapGetAllUserSearchParas = new HashMap<String,Object>();
 		mapGetAllUserSearchParas.put("orderType", getAllUser.getOrderType());
-		mapGetAllUserSearchParas.put("groupName", getAllUser.getGroupName());
-		
-
-		String usernameSM3 = Encryptor.SM3(getAllUser.getUsername()) + getAllUser.getUsername();   
-		byte[] encryptUsername = RSACoder.handleByPublic(usernameSM3.getBytes(),
-				Base64.decodeBase64(RSACoder.getPublicKeyString()), true); 
-		String username = bytesToHexString(encryptUsername);
-		mapGetAllUserSearchParas.put("username_menu", username);
+		mapGetAllUserSearchParas.put("groupName", getAllUser.getGroupName()); 
+ 
+		mapGetAllUserSearchParas.put("username_menu", getSM3SigneValue(getAllUser.getUsername()));
 		
 		mapGetAllUserSearchParas.put("username", getAllUser.getUsername());
 		mapGetAllUserSearchParas.put("pageNumber", getAllUser.getPageNumber());
@@ -1200,13 +1219,14 @@ public class RedisMessageListener implements MessageListener {
 	public up.common.nettypojo.Message getCreateUserMessage(NetworkCollect.UserEntity createUserEntity) {
 		up.common.nettypojo.Message pojoMessage = new up.common.nettypojo.Message();   
 		pojoMessage.setHead(MessageHead.createUser); 
-		
-		UserEntity userEntityBody = getUserEntityBody(createUserEntity);
+
+		UserEntity userEntityBody = getUserEntityBodyWithSM3(createUserEntity); 
 		
 		pojoMessage.setBody(userEntityBody);
 		return pojoMessage;
 	} 
 	
+
 	public up.common.nettypojo.Message getDeleteUserMessage(List<String> listUserName) {
 		up.common.nettypojo.Message pojoMessage = new up.common.nettypojo.Message();  
 		pojoMessage.setHead(MessageHead.deleteUser);
@@ -1226,7 +1246,7 @@ public class RedisMessageListener implements MessageListener {
 		up.common.nettypojo.Message pojoMessage = new up.common.nettypojo.Message();  
 		pojoMessage.setHead(MessageHead.updateUser);
 		
-		UserEntity userEntityBody = getUserEntityBody(updateUserEntity);
+		UserEntity userEntityBody = getUserEntityBodyWithSM3(updateUserEntity);
 		
 		pojoMessage.setBody(userEntityBody);
 		return pojoMessage;
@@ -1248,9 +1268,14 @@ public class RedisMessageListener implements MessageListener {
 		pojoMessage.setHead(MessageHead.modifyPasswordByAdmin); 
 		 
 		Map<String, Object> mapModifyPasswordParas = new HashMap<>();
+		 
+		mapModifyPasswordParas.put("username", getSM3SigneValue(modifyPasswordByAdmin.getUsername()));
+		mapModifyPasswordParas.put("password", getSM3SigneValue(modifyPasswordByAdmin.getPassword()));
 		
-		mapModifyPasswordParas.put("username", modifyPasswordByAdmin.getUsername());
-		mapModifyPasswordParas.put("password", modifyPasswordByAdmin.getPassword());
+		boolean isSelf = loginUserName.compareTo(modifyPasswordByAdmin.getUsername()) == 0 ? true : false;
+		 
+		mapModifyPasswordParas.put("isSelf", isSelf);
+		
 		
 		pojoMessage.setBody(mapModifyPasswordParas);
 		 
@@ -1526,6 +1551,7 @@ public class RedisMessageListener implements MessageListener {
 		
 		NetworkCollect.UserEntity userEntity =  modifyNtpConfigs.getUserInfo();
 		UserEntity userEntityBody = getUserEntityBody(userEntity);
+		
 		mapModifyNtpConfigsParas.put("user", userEntityBody);
 		
 		pojoMessage.setBody(mapModifyNtpConfigsParas);
@@ -1580,6 +1606,7 @@ public class RedisMessageListener implements MessageListener {
 		 
 		NetworkCollect.UserEntity userEntity =  modifyCommuConfigs.getUserInfo();
 		UserEntity userEntityBody = getUserEntityBody(userEntity);
+		
 		mapModifyCommuConfigsParas.put("user", userEntityBody);
 		
 		pojoMessage.setBody(mapModifyCommuConfigsParas);
@@ -1631,6 +1658,7 @@ public class RedisMessageListener implements MessageListener {
 		
 		NetworkCollect.UserEntity userEntity = modifyNetworkInterfaces.getUserInfo();
 		UserEntity userEntityBody = getUserEntityBody(userEntity);
+		
 		mapModifyNetworkInterfacesParas.put("user", userEntityBody);
 		
 		pojoMessage.setBody(mapModifyNetworkInterfacesParas);
@@ -1912,13 +1940,8 @@ public class RedisMessageListener implements MessageListener {
 		confirmAuthenBuilder.setFuncId(confirmAuthen.getFuncId());  
 
 		confirmAuthenBuilder.setUserName(confirmAuthen.getUserName());
-		 
-		byte[] encryptPass = RSACoder.handleByPublic(confirmAuthen.getPassword().getBytes(),
-				Base64.decodeBase64(RSACoder.getPublicKeyString()), true); 
-		String password = bytesToHexString(encryptPass); 
-		
-		System.out.println("password:" + password);
-		confirmAuthenBuilder.setPassword("17a1cccc8289a9fa2ec951f046e2cb262a64d611418f3f3f6cf3d761d4e024eb");
+		   
+		confirmAuthenBuilder.setPassword(getEncodePasswd(confirmAuthen.getPassword()));
 		
 		mainMessageBuilder.setConfirmAuthen(confirmAuthenBuilder);
 		return mainMessageBuilder.build();
