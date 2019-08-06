@@ -16,6 +16,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.networkcollect.NetworkCollect; 
 import com.networkcollect.NetworkCollect.MsgHeadType;
 
+import collect.core.security.AESEncrypt;
 import collect.core.security.Encryptor;
 import collect.core.security.RSACoder; 
 import io.netty.channel.ChannelFuture; 
@@ -548,7 +549,12 @@ public class RedisMessageListener implements MessageListener {
 		userEntityBody.setPassword(getSM3SigneValueBase64(userEntity.getPassword()));   
 		
 		userEntityBody.setDescription(userEntity.getDescription());
-		userEntityBody.setUkey(userEntity.getUkey());
+		try {
+			userEntityBody.setUkey(AESEncrypt.encrypt(userEntity.getUkey()));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		userEntityBody.setIfinner(userEntity.getIfinner()); 
 		
 		return userEntityBody;

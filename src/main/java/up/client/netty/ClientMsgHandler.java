@@ -17,8 +17,9 @@ import com.application.CustomRedisSerializer;
 import com.github.pagehelper.Page;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.networkcollect.NetworkCollect;
-import com.networkcollect.NetworkCollect.MsgHeadType; 
-  
+import com.networkcollect.NetworkCollect.MsgHeadType;
+
+import collect.core.security.AESEncrypt;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter; 
 import up.common.entity.AssetsDeviceEntity;
@@ -83,7 +84,12 @@ public class ClientMsgHandler extends ChannelInboundHandlerAdapter {
 		userEntityBuilder.setDescription(description); 
 		String ukey = userEntity.getUkey() == null ? "" : userEntity.getUkey();
 		
-		userEntityBuilder.setUkey(ukey);
+		try {
+			userEntityBuilder.setUkey(AESEncrypt.decrypt(ukey));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		userEntityBuilder.setLocktime(userEntity.getLocktime());
 		userEntityBuilder.setPasswordmodifytime(userEntity.getPasswordmodifytime());
 		userEntityBuilder.setIfinner(userEntity.isIfinner());
